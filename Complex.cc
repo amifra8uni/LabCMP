@@ -9,5 +9,21 @@ Includo l'archivio header della classe*/
 using std::cout;
 using std::endl;
 
-// constructor
-Complex::Complex
+// constructor o costruttori
+Complex::Complex(double real, double imag) {
+  real_=real;
+  imag_=imag;
+}
+
+//getters o funzioni d'accesso
+double Complex::real() { return real_; }
+double Complex::imag() { return imag_; }
+
+//setters o funzioni d'attualizzamento
+void Complex::setReal(double real) { real_ = real; }
+void Complex::setImag(double imag) { imag_ = imag; }
+
+void Complex::print() {
+  cout << "Parte reale: " << real_ << "Parte immaginaria: " << imag_;
+}
+
