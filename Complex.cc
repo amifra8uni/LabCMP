@@ -55,6 +55,13 @@ Complex Complex::operator-(const Complex& rhs) const{
   return Complex(re,im);
 }
 
+//Operator- between Complex and double
+Complex Complex::operator-(const double& rhs) const{
+  Complex rhs(rhs,0);
+  Complex diff = Complex::operator-(rhs);
+  return diff;
+}
+
 Complex Complex::operator*(const Complex& rhs) const{
   //real part
   double re = real_*rhs.real_-imag_*rhs.imag_;
@@ -64,6 +71,13 @@ Complex Complex::operator*(const Complex& rhs) const{
   return Complex(re,im);
 }
 
+//Operator* between Complex and double
+Complex Complex::operator*(const double& rhs) const{
+  Complex rhs(rhs,0);
+  Complex molt = Complex::operator*(rhs);
+  return molt;
+}
+
 Complex Complex::operator/(const Complex& rhs) const{
   //real part
   double re = (real_*rhs.real_+imag_*rhs.imag_)/(rhs.real_*rhs.real_+rhs.imag_*rhs.imag_);
@@ -71,6 +85,13 @@ Complex Complex::operator/(const Complex& rhs) const{
   double im= (imag_*rhs.real_-real_*rhs.imag_)/(rhs.real_*rhs.real_+rhs.imag_*rhs.imag_);
   //result of the division
   return Complex(re,im);
+}
+
+//Operator between Complex and double
+Complex Complex::operator/(const double& rhs) const{
+  Complex rhs(rhs,0);
+  Complex dividi = Complex::operator/(rhs);
+  return dividi;
 }
 
 //Utility functions
