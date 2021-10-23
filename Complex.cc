@@ -41,8 +41,8 @@ Complex Complex::operator+(const Complex& rhs) const{
 
 //Operator+ between Complex and double
 Complex Complex::operator+(const double& rhs) const{
-  Complex rhs(rhs,0);
-  Complex sum = Complex::operator+(rhs);
+  Complex Rhs(rhs,0);
+  Complex sum = Complex::operator+(Rhs);
   return sum;
 }
 
@@ -57,8 +57,8 @@ Complex Complex::operator-(const Complex& rhs) const{
 
 //Operator- between Complex and double
 Complex Complex::operator-(const double& rhs) const{
-  Complex rhs(rhs,0);
-  Complex diff = Complex::operator-(rhs);
+  Complex Rhs(rhs,0);
+  Complex diff = Complex::operator-(Rhs);
   return diff;
 }
 
@@ -73,8 +73,8 @@ Complex Complex::operator*(const Complex& rhs) const{
 
 //Operator* between Complex and double
 Complex Complex::operator*(const double& rhs) const{
-  Complex rhs(rhs,0);
-  Complex molt = Complex::operator*(rhs);
+  Complex Rhs(rhs,0);
+  Complex molt = Complex::operator*(Rhs);
   return molt;
 }
 
@@ -89,8 +89,8 @@ Complex Complex::operator/(const Complex& rhs) const{
 
 //Operator between Complex and double
 Complex Complex::operator/(const double& rhs) const{
-  Complex rhs(rhs,0);
-  Complex dividi = Complex::operator/(rhs);
+  Complex Rhs(rhs,0);
+  Complex dividi = Complex::operator/(Rhs);
   return dividi;
 }
 
