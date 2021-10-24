@@ -1,11 +1,16 @@
 /*Complex.h
-  Archivio di intestazione (o header file) della classe Complex*/
+  Archivio d'intestazione (o header file) della classe Complex*/
 
 class Complex {
  public:
-  Complex ();                      //costruttore predefinito - Default constructor
-  Complex(const Complex& complex); //costruttore copia - Copy constructor
-  
+
+  //Costruttori - constructor
+  Complex ();                      // Predefinito - Default
+  Complex(const Complex& complex); // Copia - Copy
+  //Named Constructor Idiom
+  static Complex Polari(double r,double theta);
+  static Complex Cartesiane(double real, double imag);
+
   //getters o funzioni d'accesso
   double real();
   double imag();
@@ -13,10 +18,6 @@ class Complex {
   //setters o funzioni d'aggiornamento
   void setReal(double real);
   void setImag(double imag);
-
-  //Named Constructor Idiom
-  static Complex Polari(double r,double theta);
-  static Complex Cartesiane(double real, double imag);
 
   //Overload operators
   Complex operator+(const Complex& rhs) const;
