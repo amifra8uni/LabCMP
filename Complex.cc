@@ -11,19 +11,22 @@ Includo l'archivio d'intestazione della classe*/
 using namespace std;
 
 // constructor o costruttori
-Complex::Complex() { }                      // Predefinito - Default
+Complex::Complex() {                        // Predefinito - Default
+  real_ = 0.;
+  imag_ = 0.;
+}                      
 Complex::Complex(const Complex& complex) {  // Copia - Copy
   real_=complex.real_;
   imag_=complex.imag_;
 }
-
 // Named Constructor Idiom
 Complex Complex::Polari(double r, double theta)       { return Complex(r*cos(theta), r*sin(theta)); }
 Complex Complex::Cartesiane(double real, double imag) { return Complex(real, imag);                 }
-
+ // Distruttore - Destructors
+Complex::~Complex() { cout << "E' stato chiamato il distruttore per Complex " << real_ << " + " << imag_ << "i" << endl; }
 //getters o funzioni d'accesso
-double Complex::real() { return real_; }
-double Complex::imag() { return imag_; }
+double Complex::real() const { return real_; }
+double Complex::imag() const { return imag_; }
 
 //Redefinizione operatori - Overload operators
 Complex Complex::operator+(const Complex& rhs) const{
@@ -81,7 +84,7 @@ Complex Complex::operator/(const double& rhs) const{
 //Utility functions
 void Complex::re() { cout << "The real part is: "      << real_ << endl; }
 void Complex::im() { cout << "The imaginary part is: " << imag_ << endl; }
-void Complex::r(){
+void Complex::r() {
   double r = sqrt(real_*real_+imag_*imag_);
   cout << "The module/magnitude is: " << r << endl;
 }

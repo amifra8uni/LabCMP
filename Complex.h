@@ -2,18 +2,21 @@
   Archivio d'intestazione (o header file) della classe Complex*/
 
 class Complex {
+
  public:
 
-  //Costruttori - constructor
+  // Costruttori - constructor
   Complex ();                      // Predefinito - Default
   Complex(const Complex& complex); // Copia - Copy
   //Named Constructor Idiom
   static Complex Polari(double r,double theta);
   static Complex Cartesiane(double real, double imag);
+  // Distruttore - Destructors
+  ~Complex();
 
   //getters o funzioni d'accesso
-  double real();
-  double imag();
+  double real() const;
+  double imag() const;
 
   //setters o funzioni d'aggiornamento
   void setReal(double real);
@@ -31,14 +34,15 @@ class Complex {
   
   //Utility functions
   void print();
+  void phase();
+  void phi();
+  void mag();
   void re();
   void im();
   void r();
-  void phi();
-  void mag();
-  void phase();
 
  private:
+
   double real_; // data member 
   double imag_; // data member
   
@@ -47,5 +51,6 @@ class Complex {
     real_ = real;
     imag_ = imag;
   };
+
 };
 
