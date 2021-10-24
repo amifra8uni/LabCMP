@@ -29,7 +29,7 @@ class Complex {
   Complex operator*(const double&  rhs) const;
   Complex operator/(const double&  rhs) const;
   
-//Utility functions
+  //Utility functions
   void print();
   void re();
   void im();

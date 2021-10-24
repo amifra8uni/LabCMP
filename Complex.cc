@@ -7,6 +7,7 @@ Includo l'archivio d'intestazione della classe*/
 //Includo tutti gli archivi aggiuntivi necessari
 #include <iostream>
 #include <cmath>
+
 using namespace std;
 
 // constructor o costruttori
@@ -17,12 +18,8 @@ Complex::Complex(const Complex& complex) {  // Copia - Copy
 }
 
 // Named Constructor Idiom
-Complex Complex::Polari(double r, double theta){
-  return Complex(r*cos(theta),r*sin(theta));
-}
-Complex Complex::Cartesiane(double real, double imag) {
-  return Complex(real, imag);
-}
+Complex Complex::Polari(double r, double theta)       { return Complex(r*cos(theta), r*sin(theta)); }
+Complex Complex::Cartesiane(double real, double imag) { return Complex(real, imag);                 }
 
 //getters o funzioni d'accesso
 double Complex::real() { return real_; }
@@ -70,8 +67,8 @@ Complex Complex::operator*(const double& rhs) const{
 
 Complex Complex::operator/(const Complex& rhs) const{
   double re = (real_*rhs.real_+imag_*rhs.imag_)/(rhs.real_*rhs.real_+rhs.imag_*rhs.imag_);  // real part
-  double im = (imag_*rhs.real_-real_*rhs.imag_)/(rhs.real_*rhs.real_+rhs.imag_*rhs.imag_);   // imaginary part
-  return Complex(re,im);  //result of the division
+  double im = (imag_*rhs.real_-real_*rhs.imag_)/(rhs.real_*rhs.real_+rhs.imag_*rhs.imag_);  // imaginary part
+  return Complex(re,im);                                                                    // result of the division
 }
 
 //Operator between Complex and double
@@ -82,8 +79,8 @@ Complex Complex::operator/(const double& rhs) const{
 }
 
 //Utility functions
-void Complex::re() { cout << "The real part is: "     <<real_<<endl; }
-void Complex::im() { cout << "The imaginary part is: "<<imag_<<endl; }
+void Complex::re() { cout << "The real part is: "      << real_ << endl; }
+void Complex::im() { cout << "The imaginary part is: " << imag_ << endl; }
 void Complex::r(){
   double r = sqrt(real_*real_+imag_*imag_);
   cout << "The module/magnitude is: " << r << endl;
@@ -92,8 +89,8 @@ void Complex::phi(){
   double phi = atan(imag_/real_);
   cout << "The phase is: " << phi << " rad" << " or " << phi*180/M_PI << " grades" << endl;
 }
-void Complex::mag()  { Complex::r()  ;}
-void Complex::phase(){ Complex::phi();}
+void Complex::mag()   { Complex::r()  ; }
+void Complex::phase() { Complex::phi(); }
 
 //setters o funzioni d'aggiornamento
 void Complex::setReal(double real) { real_ = real; }
