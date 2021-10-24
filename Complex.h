@@ -3,22 +3,20 @@
 
 class Complex {
  public:
-  // constructors o costruttori
-  Complex ();
-  Complex(double real, double imag);
-  Complex(const Complex& complex);
+  Complex ();                      //costruttore predefinito - Default constructor
+  Complex(const Complex& complex); //costruttore copia - Copy constructor
   
   //getters o funzioni d'accesso
   double real();
   double imag();
 
-  //setters o funzioni d'attualizzamento
+  //setters o funzioni d'aggiornamento
   void setReal(double real);
   void setImag(double imag);
 
-  /*Named Constructor Idiom
-  static Complex Polar(double r,double theta);
-  static Complex Cartesian(double x, double y);*/
+  //Named Constructor Idiom
+  static Complex Polari(double r,double theta);
+  static Complex Cartesiane(double real, double imag);
 
   //Overload operators
   Complex operator+(const Complex& rhs) const;
@@ -29,7 +27,8 @@ class Complex {
   Complex operator-(const double&  rhs) const;
   Complex operator*(const double&  rhs) const;
   Complex operator/(const double&  rhs) const;
-  //Utility functions
+  
+//Utility functions
   void print();
   void re();
   void im();
@@ -39,7 +38,13 @@ class Complex {
   void phase();
 
  private:
-  double real_; 
-  double imag_;
+  double real_; // data member 
+  double imag_; // data member
   
+  //Costruttore regolare - regular constructor
+  Complex(double real, double imag) {
+    real_ = real;
+    imag_ = imag;
+  };
 };
+

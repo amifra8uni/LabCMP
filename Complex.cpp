@@ -17,8 +17,8 @@ void Acquisizione(double& x){
 
 int main() {
 
-  Complex c1(0,0);
-  Complex c2(0,0);
+  Complex c1 = Complex::Cartesiane(0,0);
+  Complex c2 = Complex::Polari(0,0);
   double x1,y1,x2,y2;
 
   cout<<"Inserire parte reale del primo numero: ";
