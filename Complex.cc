@@ -10,7 +10,7 @@ Includo l'archivio header della classe*/
 using namespace std;
 
 // constructor o costruttori
-Complex::Complex() { }
+/*Complex::Complex() { }
 Complex::Complex(double real, double imag) {
  real_=real;
  imag_=imag;
@@ -18,18 +18,18 @@ Complex::Complex(double real, double imag) {
 Complex::Complex(const Complex& complex) {
   real_=complex.real_;
   imag_=complex.imag_;
-}
+}*/
 
-/* Named Constructor Idiom
-static Complex Polar(double r, double theta){
+// Named Constructor Idiom
+/*static Complex Polari(double r, double theta){
   return Complex(r*cos(theta),r*sin(theta));
-}
-static Complex Cartesian(double x, double y){
-  return Complex(x,y);
+  }*/
+Complex Complex::Cartesiane(double real, double imag) {
+  return Complex(real, imag);
   }
-*/
 
-//Overload operators
+
+//Redefinizione operatori - Overload operators
 Complex Complex::operator+(const Complex& rhs) const{
   //sum of real values
   double re = real_ + rhs.real_;
