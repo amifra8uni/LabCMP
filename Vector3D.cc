@@ -7,15 +7,15 @@
 using namespace std;
 
 //Constructors
-Vector3D::Vector3D(double x, double y, double z){ //Default
+Vector3D::Vector3D(){ //Default
   x_=0.;
   y_=0.;
   z_=0.;
 }
 Vector3D::Vector3D(const Vector3D& vector3D) { //Copy
-  x_=vector.x_;
-  y_=vector.y_;
-  z_=vector.z_; 
+  x_=vector3D.x_;
+  y_=vector3D.y_;
+  z_=vector3D.z_; 
 }
 
 //Getters
