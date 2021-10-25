@@ -58,8 +58,7 @@ int main() {
     cout << "vettore numero " << i << "\n"
 	 << "Magnitudine: " << vettore_itr.magnitude()
 	 << "Teta: "        << vettore_itr.theta()
-	 << "Phi: "          << vettore_itr.phi()
-      
+	 << "Phi: "         << vettore_itr.phi()
   }
   return 0;
 }
