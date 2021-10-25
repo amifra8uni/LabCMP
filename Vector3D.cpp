@@ -10,13 +10,7 @@
 
 using namespace std;
 
-void Acquisizione(double& x){
-  while(!(cin>>x)){
-    cout<<"ERRORE! Devi inserire un numero! Riprova: ";
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(),'\n');
-  }
-}
+void Acquisizione(double& x);
 
 int main() {
 
@@ -46,7 +40,7 @@ int main() {
 
   // Verifica funzionamento setters
   vettore.push_back( Vector3D(0.,0.,0.) );
-  cout << "provo a inserire un vettore 1, 1, 1" << endl;
+  cout << "\nProvo a inserire un vettore 1, 1, 1" << endl;
   vettore[2].setX(1.);
   vettore[2].setY(1.);
   vettore[2].setZ(1.);
@@ -56,12 +50,21 @@ int main() {
        << vettore[2].getZ() << " }" << endl;
 
   // Verifica funzionamento member functions
+  i = 0;
   for(Vector3D vettore_itr : vettore) {
     i++;
-    cout << "vettore numero " << i << "\n"
-	 << "Magnitudine: " << vettore_itr.magnitude()
-	 << "Teta: "        << vettore_itr.theta()
-	 << "Phi: "         << vettore_itr.phi() << endl;
+    cout << "\nVettore numero " << i << "\n"
+	 << "Magnitudine: "     << vettore_itr.magnitude()
+	 << "\nTeta: "          << vettore_itr.theta() << " rad o " << vettore_itr.theta()*180/M_PI << " gradi"
+	 << "\nPhi: "           << vettore_itr.phi() << " rad o " << vettore_itr.phi()*180/M_PI << " gradi" << endl;
   }
   return 0;
+}
+
+void Acquisizione(double& x){
+  while(!(cin>>x)){
+    cout<<"ERRORE! Devi inserire un numero! Riprova: ";
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(),'\n');
+  }
 }
