@@ -24,6 +24,10 @@ class Vector3D {
   double phi();
   double theta();
 
+  //Member functions
+  double scalarProduct(const Vector3D& rhs); //AOOOOOO
+  
+
  private:
 
   double x_;
