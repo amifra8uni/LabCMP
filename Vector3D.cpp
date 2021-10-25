@@ -31,7 +31,7 @@ int main() {
     Acquisizione(y);
     cout<<"Inserire la coordinata z del vettore " << i << ": ";
     Acquisizione(z);
-    vettore.push_back( Vettore3D(x,y,z) );
+    vettore.push_back( Vector3D(x,y,z) );
   }
 
   //Verifica corretta acquisizione dei dati usando il metodo iterativo dei vettori
@@ -45,7 +45,7 @@ int main() {
   }
 
   // Verifica funzionamento setters
-  vettore.push_back( vettore(0.,0.,0.) );
+  vettore.push_back( Vector3De(0.,0.,0.) );
   cout << "provo a inserire un vettore 1,1,1" << endl;
   cout << "vettore numero 3" << "\t vettore: { "
        << vettore[2].getX() << ", "
@@ -58,7 +58,7 @@ int main() {
     cout << "vettore numero " << i << "\n"
 	 << "Magnitudine: " << vettore_itr.magnitude()
 	 << "Teta: "        << vettore_itr.theta()
-	 << "Phi: "         << vettore_itr.phi()
+	 << "Phi: "         << vettore_itr.phi() << endl;
   }
   return 0;
 }
