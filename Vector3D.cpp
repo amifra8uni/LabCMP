@@ -45,8 +45,11 @@ int main() {
   }
 
   // Verifica funzionamento setters
-  vettore.push_back( Vector3De(0.,0.,0.) );
-  cout << "provo a inserire un vettore 1,1,1" << endl;
+  vettore.push_back( Vector3D(0.,0.,0.) );
+  cout << "provo a inserire un vettore 1, 1, 1" << endl;
+  vettore[2].setX(1.);
+  vettore[2].setY(1.);
+  vettore[2].setZ(1.);
   cout << "vettore numero 3" << "\t vettore: { "
        << vettore[2].getX() << ", "
        << vettore[2].getY() << ", "
