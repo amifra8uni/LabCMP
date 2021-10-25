@@ -7,6 +7,7 @@ class Vector3D {
   //Constructors
   Vector3D(); //Default
   Vector3D(const Vector3D& vector3D); //Copy
+  Vector3D(double x, double y,double z); //Regular
 
   //Getters
   double getX() const;
@@ -28,4 +29,5 @@ class Vector3D {
   double x_;
   double y_;
   double z_;
+
 };
