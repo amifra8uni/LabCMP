@@ -28,6 +28,11 @@ double Vector3D::magnitude(){
   double magnitude = sqrt(x_*x_+y_*y_+z_*z_);
   return magnitude;
 }
-double Vector3D:phi(){
+double Vector3D::phi(){
   double phi = acos(z_/Vector3D::magnitude());
+  return phi;
+}
+double Vector3D::theta(){
+  double theta = asin(y_/Vector3D::magnitude()*sin(Vector3D::phi()));
+  return theta;
 }
