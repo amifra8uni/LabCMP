@@ -17,6 +17,11 @@ Vector3D::Vector3D(const Vector3D& vector3D) { //Copy
   y_=vector3D.y_;
   z_=vector3D.z_; 
 }
+Vector3D::Vector3D(double x,double y,double z){ //Regular
+  x_ = x;
+  y_ = y;
+  z_ = z;
+}
 
 //Getters
 double Vector3D::getX() const {return x_;} //Restituisce la coordinata x
@@ -38,6 +43,7 @@ double Vector3D::theta(){
 }
 
 //Member functions
+
 
 //Setters
 void Vector3D::setX(double x) { x_=x; }
