@@ -1,5 +1,5 @@
 //Includo l'archivio header della classe
-#include "Vector.h"
+#include "Vector3D.h"
 
 //Includo gli archivi aggiuntivi necessari
 #include <iostream>
@@ -12,10 +12,10 @@ Vector3D::Vector3D(double x, double y, double z){ //Default
   y_=0.;
   z_=0.;
 }
-Vector3D::Vector3D(const Vector3D& vector) { //Copy
+Vector3D::Vector3D(const Vector3D& vector3D) { //Copy
   x_=vector.x_;
   y_=vector.y_;
-  z_=vector.z_;
+  z_=vector.z_; 
 }
 
 //Getters
@@ -36,3 +36,10 @@ double Vector3D::theta(){
   double theta = asin(y_/Vector3D::magnitude()*sin(Vector3D::phi()));
   return theta;
 }
+
+//Member functions
+
+//Setters
+void Vector3D::setX(double x) { x_=x; }
+void Vector3D::setY(double y) { y_=y; }
+void Vector3D::setZ(double z) { z_=z; }
