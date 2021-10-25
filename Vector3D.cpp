@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
-#inclued <vector>
+#include <vector>
 
 using namespace std;
 
