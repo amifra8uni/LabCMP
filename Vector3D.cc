@@ -43,7 +43,11 @@ double Vector3D::theta(){
 }
 
 //Member functions
-
+double Vector3D::scalarProduct(const Vector3D& rhs){
+  double scalarProduct=0.;
+  scalarProduct = x_*rhs.x_ + y_*rhs.y_ + z_*rhs.z_;
+  return scalarProduct;
+}
 
 //Setters
 void Vector3D::setX(double x) { x_=x; }
