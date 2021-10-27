@@ -29,17 +29,15 @@ int main() {
   }
 
   //Verifica corretta acquisizione dei dati usando il metodo iterativo dei vettori
-  int i = 0;
-  for(Vector3D vettore_itr : vettore) {
-    i++;
+  for( int j = 0; i < vettore.size(); i++) {
     cout << "vettore numero " << i << ": " << "\t vettore: { "
-	 << vettore_itr.getX() << ", "
-	 << vettore_itr.getY() << ", "
-	 << vettore_itr.getZ() << " }" << endl;
+	 << vettore[i].getX() << ", "
+	 << vettore[i].getY() << ", "
+	 << vettore[i].getZ() << " }" << endl;
   }
 
   // Verifica funzionamento setters
-  vettore.push_back( Vector3D(0.,0.,0.) );
+  vettore.push_back( Vector3D::Cartesiane(0.,0.,0.) );
   cout << "\nProvo a inserire un vettore 1, 1, 1" << endl;
   vettore[2].setX(1.);
   vettore[2].setY(1.);
@@ -50,14 +48,44 @@ int main() {
        << vettore[2].getZ() << " }" << endl;
 
   // Verifica funzionamento member functions
-  i = 0;
-  for(Vector3D vettore_itr : vettore) {
-    i++;
+  for(int i = 0; i < vettore.size(); i++) {
     cout << "\nVettore numero " << i << "\n"
-	 << "Magnitudine: "     << vettore_itr.magnitude()
-	 << "\nTeta: "          << vettore_itr.theta() << " rad o " << vettore_itr.theta()*180/M_PI << " gradi"
-	 << "\nPhi: "           << vettore_itr.phi() << " rad o " << vettore_itr.phi()*180/M_PI << " gradi" << endl;
+	 << "Magnitudine: "     << vettore[i].magnitude()
+	 << "\nTeta: "          << vettore[i].theta() << " rad o " << vettore[i].theta()*180/M_PI << " gradi"
+	 << "\nPhi: "           << vettore[i].phi() << " rad o " << vettore[i].phi()*180/M_PI << " gradi" << endl;
   }
+
+  // Verifica funzionamento Scalar Product
+  double scalarProduct = vettore[0].scalarProduct(vettore[1]);
+  cout << "Prodotto scalare="<< scalarProduct<<endl;
+
+  // Verifica funzionamento Vector Product
+  Vector3D vectorProduct = vettore[0].vectorProduct(vettore[1]);
+  cout << "Prodotto vettoriale" << "\t vettore: { "
+       << vectorProduct.getX() << ", "
+       << vectorProduct.getY() << ", "
+       << vectorProduct.getZ() << " }" << endl;
+
+  // Verifica funzionamento angle
+  double angle=vettore[0].angle(vettore[1]);
+  cout << "Angle tra i due vettori= "<<angle<<" rad o " << angle*180/M_PI << " gradi"<<endl;
+  cout << "Prova acos(): acos(1)= "<< acos(1.)<<endl;
+
+  // Verifica funzionamento overload operators
+  Vector3D v1 = vettore[0].operator+(vettore[1]);
+  cout << "Somma tra due vettori= ";
+  v1.print();
+  Vector3D v2 = vettore[0].operator-(vettore[1]);
+  cout << "Differenza tra due vettori= ";
+  v2.print();
+  Vector3D v4;
+  v4.operator=(v1);
+  v4.print();
+  Vector3D v5 = vettore[0].operator*(3);
+  v5.print();
+  Vector3D v6 = vettore[0].operator/(0);
+  v6.print();
+  
   return 0;
 }
 

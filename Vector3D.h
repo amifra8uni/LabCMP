@@ -25,9 +25,19 @@ class Vector3D {
   double magnitude();
   double phi();
   double theta();
+  void print();
 
   //Member functions
-  double scalarProduct(const Vector3D& rhs); //AOOOOOO
+  double scalarProduct(const Vector3D& rhs); 
+  Vector3D vectorProduct(const Vector3D& rhs);
+  double angle(const Vector3D& rhs);
+
+  //Overload operators
+  Vector3D operator+(const Vector3D& rhs) const;
+  Vector3D operator-(const Vector3D& rhs) const;
+  const Vector3D operator=(const Vector3D& rhs);
+  Vector3D operator*(const double& rhs) const;
+  Vector3D operator/(const double& rhs) const;
   
 
  private:
