@@ -52,7 +52,7 @@ int main() {
     cout << "\nVettore numero " << i << "\n"
 	 << "Magnitudine: "     << vettore[i].magnitude()
 	 << "\nTeta: "          << vettore[i].theta() << " rad o " << vettore[i].theta()*180/M_PI << " gradi"
-	 << "\nPhi: "           << vettore[i].phi() << " rad o " << vettore[i].phi()*180/M_PI << " gradi" << endl;
+	 << "\nPhi: "           << vettore[i].phi()   << " rad o " << vettore[i].phi()*180/M_PI   << " gradi" << endl;
   }
 
   // Verifica funzionamento Scalar Product
