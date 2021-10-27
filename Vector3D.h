@@ -7,7 +7,9 @@ class Vector3D {
   //Constructors
   Vector3D(); //Default
   Vector3D(const Vector3D& vector3D); //Copy
-  Vector3D(double x, double y,double z); //Regular
+  //Named Constructor Idiom
+  static Vector3D Sferiche(double r,double theta, double phi);
+  static Vector3D Cartesiane(double x, double y, double z);
 
   //Getters
   double getX() const;
@@ -33,5 +35,11 @@ class Vector3D {
   double x_;
   double y_;
   double z_;
-
+  
+//Costruttore regolare - regular constructor
+  Vector3D(double x, double y, double z) {
+    x_ = x;
+    y_ = y;
+    z_ = z;
+  };
 };

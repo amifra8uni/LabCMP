@@ -25,7 +25,7 @@ int main() {
     Acquisizione(y);
     cout<<"Inserire la coordinata z del vettore " << i << ": ";
     Acquisizione(z);
-    vettore.push_back( Vector3D(x,y,z) );
+    vettore.push_back( Vector3D::Cartesiane(x,y,z) );
   }
 
   //Verifica corretta acquisizione dei dati usando il metodo iterativo dei vettori

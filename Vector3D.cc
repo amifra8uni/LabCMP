@@ -6,21 +6,20 @@
 #include <cmath>
 using namespace std;
 
-//Constructors
-Vector3D::Vector3D(){ //Default
+//Costruttori o constructors
+Vector3D::Vector3D(){ // Predefinito - Default
   x_=0.;
   y_=0.;
   z_=0.;
 }
-Vector3D::Vector3D(const Vector3D& vector3D) { //Copy
+Vector3D::Vector3D(const Vector3D& vector3D) { // Copia - Copy
   x_=vector3D.x_;
   y_=vector3D.y_;
   z_=vector3D.z_; 
 }
-Vector3D::Vector3D(double x,double y,double z){ //Regular
-  x_ = x;
-  y_ = y;
-  z_ = z;
+// Named Constructor Idiom
+Vector3D Vector3D::Sferiche(double r, double theta, double phi)       { return Vector3D(r*sin(theta)*cos(phi),r*sin(theta)*sin(phi), r*cos(theta)); }
+Vector3D Vector3D::Cartesiane(double x, double y, double z) { return Vector3D(x, y, z);           
 }
 
 //Getters
