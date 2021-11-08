@@ -32,14 +32,14 @@ int main() {
 
  // Create the B meson 4-momentum in the LAB frame
   TLorentzVector p4_B_lab;
-  double M_B = 5.279; // GeV
+  double M_B     = 5.279; // GeV
   double p_B_lab = 0.300; // GeV
   // Flat metric, (- - - +) signature: m^2 = E^2 - p^2
   p4_B_lab.SetPxPyPzE(p_B_lab, 0, 0, sqrt(p_B_lab*p_B_lab+M_B*M_B));
 
   // Creando il quadrimpulso del pione e del kaone nel sistem c.d.m. - Create the pion 4-momentum in the B rest frame
   double m_pi = 0.140; // GeV
-  double m_K = 0.500;  // Gev
+  double m_K  = 0.500; // Gev
   double p_pi_cdm = sqrt( M_B*M_B*M_B*M_B + m_pi*m_pi*m_pi*m_pi + m_K*m_K*m_K*m_K - 2*M_B*M_B*m_pi*m_pi -2*M_B*M_B*m_K*m_K ) / (2*M_B); // GeV
 
   /* Genero 10^4 direzioni casuali
