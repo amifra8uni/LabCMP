@@ -3,32 +3,19 @@
 
 //Includo l'archivio di intestazione standard e quelli aggiuntivi
 #include <iostream>
-#include <cmath>
 
 //Archivio di intestazione di ROOT: numeri casuali, grafici, salvataggio
 #include "TRandom3.h"
 #include "TH1F.h"
 #include "TCanvas.h"
 #include "TFile.h"
-#include "Vector3D.h"
+#include "TLorentzVector.h"
+#include "TMath.h"
 
 using namespace std;
 
 // For the time being we will not use command line variables
-int main(int argc, char* argv[]) {
-
-  // Apri TFile per l'output
-  TString rootfname("./output.root");
-  // Sovrascrivi l'archivio di output se dovesse già esistere
-  TFile rfile(rootfname, "RECREATE");
-  /* Apri il l'archivio ROOT e mi assicuro che sia stato aperto con successo.
-     Cause tipiche di non riuscita sono: 1) percorso sbagliato 2) mancanza privilegi di scrittura
-     Typical cause for failure are: 1) wrong path, 2) no write privilege */
-  if( !rfile.IsOpen() ) {
-    std::cout << "Problemi creando l'archivio ROOT. Esistendo... \nProblems creating root file. existing... " << std::endl;
-    exit(-1);
-  }
-  std::cout << "Memorizzando l'output in un archivio ROOT \nStoring output in root file " << rootfname << std::endl;
+int main() {
 
   /*Con un generatore di numeri casuali, vogliamo
     1) Generale il VALORE VERO dell'osservabile in un determinato intervallo e poi
@@ -38,17 +25,54 @@ int main(int argc, char* argv[]) {
   // 2) take into account the detector resolution to generate the
   //    VALUE MEASURED by the detector
 
-  // Genero un vettore uniformemente distribuito sulla superficie di una sfera unitaria
-  double x,y,z;
   // Start up a new random generator... (we have a new: we will need a delete!)
   TRandom*  gen = new TRandom();
   // ...exploiting the machine clock for the seed
   gen->SetSeed(0);
-gen->Sphere(x, y, z, 1);
-cout << "Hai generato un vettore casuale unitario {x, y, z} = { "<< x << " " << y << " " << z << " }" <<endl;
 
-  // Critical to close the file!
-  rfile.Close();
+ // Create the B meson 4-momentum in the LAB frame
+  TLorentzVector p4_B_lab;
+  double M_B = 5.279; // GeV
+  double p_B_lab = 0.300; // GeV
+  // Flat metric, (- - - +) signature: m^2 = E^2 - p^2
+  p4_B_lab.SetPxPyPzE(p_B_lab, 0, 0, sqrt(p_B_lab*p_B_lab+M_B*M_B));
+
+  // Creando il quadrimpulso del pione e del kaone nel sistem c.d.m. - Create the pion 4-momentum in the B rest frame
+  double m_pi = 0.140; // GeV
+  double m_K = 0.500;  // Gev
+  double p_pi_cdm = sqrt( M_B*M_B*M_B*M_B + m_pi*m_pi*m_pi*m_pi + m_K*m_K*m_K*m_K - 2*M_B*M_B*m_pi*m_pi -2*M_B*M_B*m_K*m_K ) / (2*M_B); // GeV
+
+  /* Genero 10^4 direzioni casuali
+     As a reminder:
+     * Hadron colliders measure physical momenta in terms of momentum transverse
+       to the beam axis (z-axis); the TRANSVERSE MOMENTUM is denoted by p_T
+     * p_x = p_T * cos(phi) 
+       p_y = p_T * sin(phi) 
+       p_z = m_T * sinh(eta) 
+       E = m_T * cosh(eta) 
+       where m_T = sqrt(p_T^2 + m^2) is the TRANSVERSE MASS
+     * eta is the PSEUDORAPIDITY: eta = -ln[tan(theta/2)]; differences in eta
+       are Lorentz invariants under boosts along the longitudinal axis
+  */
+  vector <TLorentzVector> p4_pi_cdm;
+  vector <TLorentzVector> p4_K_cdm;
+  for(int i = 0; i < 10000; i++) {
+  // Genero un vettore uniformemente distribuito sulla superficie di una sfera unitaria
+  double x,y,z;
+  gen->Sphere(x, y, z, 1);
+   p4_pi_cdm.push_back( TLorentzVector() );
+   p4_K_cdm.push_back(  TLorentzVector() );
+  // Flat metric, (- - - +) signature: m^2 = E^2 - p^2
+  // CdM
+  p4_pi_cdm[i].SetPxPyPzE( p_pi_cdm*x,  p_pi_cdm*y,  p_pi_cdm*z, sqrt(m_pi*m_pi+p_pi_cdm*p_pi_cdm));
+  p4_K_cdm[i].SetPxPyPzE( -p_pi_cdm*x, -p_pi_cdm*y, -p_pi_cdm*z, sqrt(m_pi*m_pi+p_pi_cdm*p_pi_cdm));
+  // Trasformazion (boost) nel sistema di laboratorio
+  p4_pi_cdm[i].Boost(p4_B_lab.BoostVector());
+ }
+
+  // Delete the random generator now we are done with it
+  // [We had new, here is delete!]
+  delete gen;
 
   // Exit
   return 0;
