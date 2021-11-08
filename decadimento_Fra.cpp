@@ -39,17 +39,13 @@ int main(int argc, char* argv[]) {
   //    VALUE MEASURED by the detector
 
   // Genero un vettore uniformemente distribuito sulla superficie di una sfera unitaria
-double x,y,z;
+  double x,y,z;
   // Start up a new random generator... (we have a new: we will need a delete!)
-  TRandom3*  gen = new TRandom3();
+  TRandom*  gen = new TRandom();
   // ...exploiting the machine clock for the seed
   gen->SetSeed(0);
-gen.Sphere(&x, &y, &z, 1);
-cout << "{x, y, z} = { "<< x << y << z << " }" <<endl;
-
-  // Delete the random generator now we are done with it
-  // [We had new, here is delete!]
-  delete gen;
+gen->Sphere(x, y, z, 1);
+cout << "Hai generato un vettore casuale unitario {x, y, z} = { "<< x << " " << y << " " << z << " }" <<endl;
 
   // Critical to close the file!
   rfile.Close();
