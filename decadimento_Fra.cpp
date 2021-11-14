@@ -34,11 +34,7 @@ int main() {
   /*Con un generatore di numeri casuali, vogliamo
     1) Generale il VALORE VERO dell'osservabile in un determinato intervallo e poi
     2) Tener contro della risuluzione del rivelatore per generale il VALORE MISURATO da quest'ultimo */
-  // With a random generator, we want to
-  // 1) generate the TRUE VALUE of the observable in a given range and then
-  // 2) take into account the detector resolution to generate the
-  //    VALUE MEASURED by the detector
-
+  
   // Start up a new random generator... (we have a new: we will need a delete!)
   TRandom*  gen = new TRandom();
   // ...exploiting the machine clock for the seed
