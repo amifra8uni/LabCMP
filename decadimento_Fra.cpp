@@ -67,16 +67,13 @@ int main() {
   THStack hs("hs", "Sovrimpressione s teorico e misurato");
   THStack hsris("hsris", "Sovrimpressione s misurato per diverse risoluzioni");
   TH1F hs0("hs", "Distribuzione della massa invariante", nbins, xlo, xhi);
-  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", nbins, 0, 180);
-  // The 'd' is for detector
-  /*TH1F hds1( "hds1"  , "Distribuzione della massa invariante misurata", nbins, xlo , xhi);
-  TH1F hds3( "hds3"  , "Distribuzione della massa invariante misurata", nbins, xlo , xhi);
-  TH1F hds5( "hds5"  , "Distribuzione della massa invariante misurata", nbins, xlo , xhi);
-  TH1F hds10("hds10" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi);*/
+  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", nbins, 0, 180)
+    
   histo.push_back(TH1F( "hds1" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
   histo.push_back(TH1F( "hds3" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
   histo.push_back(TH1F( "hds5" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
   histo.push_back(TH1F("hds10" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
+  
   /* Genero 10^4 direzioni casuali
      As a reminder:
      * Hadron colliders measure physical momenta in terms of momentum transverse
@@ -110,6 +107,7 @@ int main() {
 
     p_K_0  = p4_K.P();
     p_pi_0 = p4_pi.P();
+    
     // Generate MEASURED value based on the true value and resolution
     for(int j = 0; j < histo.size(); j++) {
       p_pi_meas = gen->Gaus(p_pi_0, p_pi_0*ris[j]);
@@ -126,10 +124,12 @@ int main() {
   // After generating the data, we take care of plotting the results:
   // * create canvas
   TCanvas canv("canv", "canvas for plotting", 1280, 1024);
+  
   // * start from TRUE values and customize some histogram properties
   hs0.GetXaxis()->SetTitle( "Distribuzione di s [GeV]");
   histo[1].GetXaxis()->SetTitle("Distribuzione di s misurata [GeV]");
   hangle.GetXaxis()->SetTitle("Distribuzione angolare [°]");
+  
   // * plot e store to file in 1 formats
   hs0.Draw();
   canv.SaveAs("./true-mass.pdf");
@@ -153,6 +153,7 @@ int main() {
   }
   hsris.Draw();
   canv.SaveAs("./invariant-masses.pdf");
+  
   // Delete the random generator now we are done with it
   // [We had new, here is delete!]
   delete gen;
