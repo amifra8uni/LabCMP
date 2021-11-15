@@ -64,7 +64,7 @@ int main() {
   vector<TH1F> histo;
   vector<short int> colore = {kBlue, kRed, kGreen, kYellow};
   TH1F hs0("hs", "Distribuzione della massa invariante", nbins, xlo, xhi);
-  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", nbins, 0, 180);
+  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", 3*nbins, 0, 180);
     
   histo.push_back(TH1F( "hds1" , "Distribuzione della massa invariante misurata con risoluzione 1%" , nbins, xlo , xhi) );
   histo.push_back(TH1F( "hds3" , "Distribuzione della massa invariante misurata con risoluzione 3%" , nbins, xlo , xhi) );
@@ -88,11 +88,11 @@ int main() {
   // * un puntatore alla variabile in memoria
   // * il tipo di variabile nel ramo ("value/D" che è un double)
   tree->Branch("Impulso del mesone B",                     &p_B, "Impulso del mesone B/D");
-  tree->Branch("Massa delle particelle figlie",            &nmass, "Massa delle particelle/D");
+  tree->Branch("Massa delle particelle figlie",            &nmass, "pi, K/D");
   tree->Branch("Numero particelle figlie",                 &nDau, "Numero particelle figlie/D");
-  tree->Branch("Impulso delle particelle figlie",          &p, "Impulso delle particelle figlie/D");
-  tree->Branch("Angolo phi rispetto alla linea di volo",   &phi, "Angolo phi rispetto alla linea di volo");
-  tree->Branch("Angolo theta rispetto alla linea di volo", &theta, "Angolo theta rispetto alla linea di volo");
+  tree->Branch("Impulso delle particelle figlie",          &p, "pi, K/D");
+  tree->Branch("Angolo phi rispetto alla linea di volo",   &phi, "pi, K/D");
+  tree->Branch("Angolo theta rispetto alla linea di volo", &theta, "pi, K/D");
 
   /* Genero 10^4 direzioni casuali
      As a reminder:
@@ -105,7 +105,7 @@ int main() {
        where m_T = sqrt(p_T^2 + m^2) is the TRANSVERSE MASS
      * eta is the PSEUDORAPIDITY: eta = -ln[tan(theta/2)]; differences in eta
        are Lorentz invariants under boosts along the longitudinal axis */ 
-  for(int i = 0; i < 10000; i++) {
+  for(int i = 0; i < 100000; i++) {
     // Genero un vettore uniformemente distribuito sulla superficie di una sfera unitaria
     double x, y, z, s_0, p_K_meas, p_pi_meas;
     double ris[4] = {0.01, 0.03, 0.05, 0.1};
@@ -125,6 +125,7 @@ int main() {
     theta[1] = p4_K.Theta();
     phi[0] = p4_pi.Phi();
     phi[1] = p4_K.Phi();
+    tree->Fill();
     //Calcolo massa invariante
     TLorentzVector p4_somma_0 = p4_K + p4_pi;
     s_0 = sqrt( ( p4_K.E() + p4_pi.E() )*( p4_K.E() + p4_pi.E() ) - p4_somma_0.P()*p4_somma_0.P() );
@@ -145,7 +146,6 @@ int main() {
       double s_mis = sqrt( ( p4_K.E() + p4_pi.E() )*( p4_K.E() + p4_pi.E() ) - p4_somma_mis.P()*p4_somma_mis.P() );
       histo[j].Fill(s_mis);
     }
-    tree->Fill();
   }
 
   // After generating the data, we take care of plotting the results:
@@ -174,14 +174,21 @@ int main() {
   histo[1].Draw("same");
   canv.SaveAs("./invariant-mass.pdf");
 
-  histo[1].GetXaxis()->SetTitle("Massa invariante s [GeV]");
+  histo[0].SetStats(0);
+  histo[0].SetTitle("Confronto s misurato con diverse risoluzioni");
+  histo[0].GetXaxis()->SetTitle("Massa invariante s [GeV]");
   histo[0].SetFillColor(kBlue);
   histo[0].Draw();
   for(int k = 1; k < colore.size(); k++) {
     histo[k].SetFillColor(colore[k]);
     histo[k].Draw("same");
+    histo[k].SetStats(0);
   }
-  //hsris.Draw();
+  /*for(int k = 0; k < colore.size(); k++) {
+    histo[k].SetFillColor(0);
+    histo[k].Draw("same");
+    histo[k].SetStats(0);
+  }*/
   canv.SaveAs("./invariant-masses.pdf");
 
   // Sovrascrivere materialmente l'alberto in un archivio sul disco
@@ -199,11 +206,12 @@ int main() {
   histo[1].Write();
   hangle.Write();
 
+  delete tree;
   // Critical to close the file!
   rfile.Close();
   
   // === Finito di salvare i dati in un TTree
-  delete tree;
+  //delete tree;
 
   // Exit
   return 0;
