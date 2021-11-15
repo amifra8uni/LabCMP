@@ -54,7 +54,7 @@ int main() {
   double m_pi  = 0.140; // GeV
   double m_K   = 0.500; // Gev
   double p_cdm = sqrt( M_B*M_B*M_B*M_B + m_pi*m_pi*m_pi*m_pi + m_K*m_K*m_K*m_K - 2*M_B*M_B*m_pi*m_pi - 2*M_B*M_B*m_K*m_K ) / (2*M_B); // GeV
-
+  double nmass[NDAU] = {m_pi, m_K};
   // Istogramma della massa invariante (name, title, number of bins, range)
   int    nbins = 200;
   double resol = 0.1;
@@ -80,7 +80,7 @@ int main() {
 
   //Variabili che devono essere salvate nell'albero (rami): 
   double nDau = NDAU;
-  double nmass[NDAU], p[NDAU], theta[NDAU], phi[NDAU];
+  double p[NDAU], theta[NDAU], phi[NDAU];
 
   // Fai si che le informazioni per ogni ramo dell'albero corrispondano ai nostri dati:
   // Una funzione di un ramo ha 3 argomenti:
@@ -119,7 +119,12 @@ int main() {
     // Lab
     p4_pi.Boost(p4_B.BoostVector());
     p4_K.Boost( p4_B.BoostVector());
-
+    p[0] = p4_pi.P();
+    p[1] = p4_K.P();
+    theta[0] = p4_pi.Theta();
+    theta[1] = p4_K.Theta();
+    phi[0] = p4_pi.Phi();
+    phi[1] = p4_K.Phi();
     //Calcolo massa invariante
     TLorentzVector p4_somma_0 = p4_K + p4_pi;
     s_0 = sqrt( ( p4_K.E() + p4_pi.E() )*( p4_K.E() + p4_pi.E() ) - p4_somma_0.P()*p4_somma_0.P() );
