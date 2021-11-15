@@ -3,6 +3,7 @@
 
 //Includo l'archivio di intestazione standard e quelli aggiuntivi
 #include <iostream>
+#include <time.h>
 
 //Archivio di intestazione di ROOT: numeri casuali, grafici, salvataggio
 #include "TRandom3.h"
@@ -40,11 +41,11 @@ int main() {
   // Start up a new random generator... (we have a new: we will need a delete!)
   TRandom*  gen = new TRandom();
   // ...exploiting the machine clock for the seed
-  gen->SetSeed(0);
+  gen->SetSeed(time(NULL));
 
  // Create the B meson 4-momentum in the LAB frame
   TLorentzVector p4_B, p4_pi, p4_K;
-  double M_B     = 5.279; // GeV
+  double M_B = 5.279; // GeV
   double p_B = 0.300; // GeV
   // Flat metric, (- - - +) signature: m^2 = E^2 - p^2
   p4_B.SetPxPyPzE(p_B, 0, 0, sqrt(p_B*p_B + M_B*M_B));
@@ -70,6 +71,29 @@ int main() {
   histo.push_back(TH1F( "hds5" , "Distribuzione della massa invariante misurata con risoluzione 5%" , nbins, xlo , xhi) );
   histo.push_back(TH1F("hds10" , "Distribuzione della massa invariante misurata con risoluzione 10%", nbins, xlo , xhi) );
   
+  // === Salva i dati in un TTree
+  // Crea un nuovo oggetto TTree
+  TTree* tree = new TTree("datatree", "albero contenente i nostri dai");
+  // Il nome degli oggetti TTree (datatree), e non il nome della variabile
+  // C++ (tree), è importante perchè ROOT salva tutti gli oggetti in un
+  // TFile con il loro nome
+
+  //Variabili che devono essere salvate nell'albero (rami): 
+  double nDau = NDAU;
+  double nmass[NDAU], p[NDAU], theta[NDAU], phi[NDAU];
+
+  // Fai si che le informazioni per ogni ramo dell'albero corrispondano ai nostri dati:
+  // Una funzione di un ramo ha 3 argomenti:
+  // * il nome del ramo
+  // * un puntatore alla variabile in memoria
+  // * il tipo di variabile nel ramo ("value/D" che è un double)
+  tree->Branch("Impulso del mesone B",                     &p_B, "Impulso del mesone B/D");
+  tree->Branch("Massa delle particelle figlie",            &nmass, "Massa delle particelle/D");
+  tree->Branch("Numero particelle figlie",                 &nDau, "Numero particelle figlie/D");
+  tree->Branch("Impulso delle particelle figlie",          &p, "Impulso delle particelle figlie/D");
+  tree->Branch("Angolo phi rispetto alla linea di volo",   &phi, "Angolo phi rispetto alla linea di volo");
+  tree->Branch("Angolo theta rispetto alla linea di volo", &theta, "Angolo theta rispetto alla linea di volo");
+
   /* Genero 10^4 direzioni casuali
      As a reminder:
      * Hadron colliders measure physical momenta in terms of momentum transverse
@@ -116,6 +140,7 @@ int main() {
       double s_mis = sqrt( ( p4_K.E() + p4_pi.E() )*( p4_K.E() + p4_pi.E() ) - p4_somma_mis.P()*p4_somma_mis.P() );
       histo[j].Fill(s_mis);
     }
+    tree->Fill();
   }
 
   // After generating the data, we take care of plotting the results:
@@ -153,6 +178,12 @@ int main() {
   }
   //hsris.Draw();
   canv.SaveAs("./invariant-masses.pdf");
+
+  // Sovrascrivere materialmente l'alberto in un archivio sul disco
+  tree->Write();
+
+  // Stampare alcune informazioni sull'albero
+  tree->Print();
   
   // Delete the random generator now we are done with it
   // [We had new, here is delete!]
@@ -163,25 +194,12 @@ int main() {
   histo[1].Write();
   hangle.Write();
 
-  // === Salva i dati in un TTree
-  // Crea un nuovo oggetto TTree
-  TTree* tree = new TTree("datatree", "albero contenente i nostri dai");
-  // Il nome degli oggetti TTree (datatree), e non il nome della variabile
-  // C++ (tree), è importante perchè ROOT salva tutti gli oggetti in un
-  // TFile con il loro nome
-
-  //Variabili che devono essere salvate nell'albero (rami): 
-  double nDau = NDAU;
-  double nmass[NDAU], p[NDAU], theta[NDAU], phi[NDAU];
-
-  // Fai si che le informazioni per ogni ramo dell'albero corrispondano ai nostri dati:
-  // Una funzione di un ramo ha 3 argomenti:
-  // * il nome del ramo
-  // * un puntatore alla variabile in memoria
-  
   // Critical to close the file!
   rfile.Close();
   
+  // === Finito di salvare i dati in un TTree
+  delete tree;
+
   // Exit
   return 0;
 }
