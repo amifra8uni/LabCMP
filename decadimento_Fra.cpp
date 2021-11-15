@@ -11,15 +11,17 @@
 #include "TFile.h"
 #include "TLorentzVector.h"
 #include "TMath.h"
-#include "THStack.h"
 #include "Vector3D.h"
+#include "TTree.h"
+
+#define NDAU 2
 
 using namespace std;
 
 // For the time being we will not use command line variables
 int main() {
 
-    // Open TFile for output
+  // Open TFile for output
   TString rootfname("./output.root");
   // Overwite output file if it already exists
   TFile rfile(rootfname, "RECREATE");
@@ -50,7 +52,7 @@ int main() {
   // Creando il quadrimpulso del pione e del kaone nel sistem c.d.m. - Create the pion 4-momentum in the B rest frame
   double m_pi  = 0.140; // GeV
   double m_K   = 0.500; // Gev
-  double p = sqrt( M_B*M_B*M_B*M_B + m_pi*m_pi*m_pi*m_pi + m_K*m_K*m_K*m_K - 2*M_B*M_B*m_pi*m_pi - 2*M_B*M_B*m_K*m_K ) / (2*M_B); // GeV
+  double p_cdm = sqrt( M_B*M_B*M_B*M_B + m_pi*m_pi*m_pi*m_pi + m_K*m_K*m_K*m_K - 2*M_B*M_B*m_pi*m_pi - 2*M_B*M_B*m_K*m_K ) / (2*M_B); // GeV
 
   // Istogramma della massa invariante (name, title, number of bins, range)
   int    nbins = 200;
@@ -60,15 +62,13 @@ int main() {
   double binwidth = (xhi-xlo) / nbins;
   vector<TH1F> histo;
   vector<short int> colore = {kBlue, kRed, kGreen, kYellow};
-  THStack hs("hs", "Sovrimpressione s teorico e misurato");
-  THStack hsris("hsris", "Sovrimpressione s misurato per diverse risoluzioni");
   TH1F hs0("hs", "Distribuzione della massa invariante", nbins, xlo, xhi);
-  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", nbins, 0, 180)
+  TH1F hangle("hangle", "Distribuzione dell'angolo di apertura tra K e pi", nbins, 0, 180);
     
-  histo.push_back(TH1F( "hds1" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
-  histo.push_back(TH1F( "hds3" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
-  histo.push_back(TH1F( "hds5" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
-  histo.push_back(TH1F("hds10" , "Distribuzione della massa invariante misurata", nbins, xlo , xhi) );
+  histo.push_back(TH1F( "hds1" , "Distribuzione della massa invariante misurata con risoluzione 1%" , nbins, xlo , xhi) );
+  histo.push_back(TH1F( "hds3" , "Distribuzione della massa invariante misurata con risoluzione 3%" , nbins, xlo , xhi) );
+  histo.push_back(TH1F( "hds5" , "Distribuzione della massa invariante misurata con risoluzione 5%" , nbins, xlo , xhi) );
+  histo.push_back(TH1F("hds10" , "Distribuzione della massa invariante misurata con risoluzione 10%", nbins, xlo , xhi) );
   
   /* Genero 10^4 direzioni casuali
      As a reminder:
@@ -83,15 +83,16 @@ int main() {
        are Lorentz invariants under boosts along the longitudinal axis */ 
   for(int i = 0; i < 10000; i++) {
     // Genero un vettore uniformemente distribuito sulla superficie di una sfera unitaria
-    double x, y, z, s_0, p_K_0, p_pi_0, p_K_meas, p_pi_meas;
+    double x, y, z, s_0, p_K_meas, p_pi_meas;
     double ris[4] = {0.01, 0.03, 0.05, 0.1};
     gen->Sphere(x, y, z, 1);
     // Flat metric, (- - - +) signature: m^2 = E^2 - p^2
     // CdM
-    p4_pi.SetPxPyPzE( p*x,  p*y,  p*z, sqrt(m_pi*m_pi + p*p));
-    p4_K.SetPxPyPzE( -p*x, -p*y, -p*z, sqrt(m_K*m_K   + p*p));
+    p4_pi.SetPxPyPzE( p_cdm*x,  p_cdm*y,  p_cdm*z, sqrt(m_pi*m_pi + p_cdm*p_cdm));
+    p4_K.SetPxPyPzE( -p_cdm*x, -p_cdm*y, -p_cdm*z, sqrt(m_K*m_K   + p_cdm*p_cdm));
 
     // Trasformazion (boost) nel sistema di laboratorio
+    // Lab
     p4_pi.Boost(p4_B.BoostVector());
     p4_K.Boost( p4_B.BoostVector());
 
@@ -101,8 +102,8 @@ int main() {
     hs0.Fill(s_0);
     hangle.Fill(p4_K.Angle(p4_pi.Vect())*180/M_PI);
 
-    p_K_0  = p4_K.P();
-    p_pi_0 = p4_pi.P();
+    double p_K_0  = p4_K.P();
+    double p_pi_0 = p4_pi.P();
     
     // Generate MEASURED value based on the true value and resolution
     for(int j = 0; j < histo.size(); j++) {
@@ -122,32 +123,35 @@ int main() {
   TCanvas canv("canv", "canvas for plotting", 1280, 1024);
   
   // * start from TRUE values and customize some histogram properties
-  hs0.GetXaxis()->SetTitle( "Distribuzione di s [GeV]");
-  histo[1].GetXaxis()->SetTitle("Distribuzione di s misurata [GeV]");
-  hangle.GetXaxis()->SetTitle("Distribuzione angolare [°]");
+  hs0.GetXaxis()->SetTitle( "Massa invariante s [GeV]");
+  histo[1].GetXaxis()->SetTitle("Massa invariante s [GeV]");
+  hangle.GetXaxis()->SetTitle("Angolo di apertura [°]");
   
   // * plot e store to file in 1 formats
+  hs0.SetFillColor(kBlue);
   hs0.Draw();
   canv.SaveAs("./true-mass.pdf");
-  histo[0].Draw();
-  canv.SaveAs("./measured-mass-1per.pdf");
+  histo[1].SetFillColor(kBlue);
   histo[1].Draw();
   canv.SaveAs("./measured-mass.pdf");
+  hangle.SetFillColor(kBlue);
   hangle.Draw();
   canv.SaveAs("./opening-angle.pdf");
 
   hs0.SetFillColor(kRed);
-  hs.Add(&hs0);
+  hs0.Draw();
   histo[1].SetFillColor(kBlue);
-  hs.Add(&histo[1]);
-  hs.Draw();
+  histo[1].Draw("same");
   canv.SaveAs("./invariant-mass.pdf");
 
-  for(int k = 0; k < colore.size(); k++) {
+  histo[1].GetXaxis()->SetTitle("Massa invariante s [GeV]");
+  histo[0].SetFillColor(kBlue);
+  histo[0].Draw();
+  for(int k = 1; k < colore.size(); k++) {
     histo[k].SetFillColor(colore[k]);
-    hsris.Add(&histo[k]);
+    histo[k].Draw("same");
   }
-  hsris.Draw();
+  //hsris.Draw();
   canv.SaveAs("./invariant-masses.pdf");
   
   // Delete the random generator now we are done with it
@@ -158,6 +162,22 @@ int main() {
   hs0.Write();
   histo[1].Write();
   hangle.Write();
+
+  // === Salva i dati in un TTree
+  // Crea un nuovo oggetto TTree
+  //TTree* tree = new TTree("datatree", "albero contenente i nostri dai");
+  // Il nome degli oggetti TTree (datatree), e non il nome della variabile
+  // C++ (tree), è importante perchè ROOT salva tutti gli oggetti in un
+  // TFile con il loro nome
+
+  //Variabili che devono essere salvate nell'albero (rami): 
+  double nDau = NDAU;
+  double nmass[NDAU], p[NDAU], theta[NDAU], phi[NDAU];
+
+  // Fai si che le informazioni per ogni ramo dell'albero corrispondano ai nostri dati:
+  // Una funzione di un ramo ha 3 argomenti:
+  // * il nome del ramo
+  // * un puntatore alla variabile in memoria
   
   // Critical to close the file!
   rfile.Close();
