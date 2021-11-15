@@ -165,7 +165,7 @@ int main() {
 
   // === Salva i dati in un TTree
   // Crea un nuovo oggetto TTree
-  //TTree* tree = new TTree("datatree", "albero contenente i nostri dai");
+  TTree* tree = new TTree("datatree", "albero contenente i nostri dai");
   // Il nome degli oggetti TTree (datatree), e non il nome della variabile
   // C++ (tree), è importante perchè ROOT salva tutti gli oggetti in un
   // TFile con il loro nome
