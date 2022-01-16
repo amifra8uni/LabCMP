@@ -182,7 +182,7 @@ int main() {
   for(int k = 1; k < colore.size(); k++) {
     histo[k].SetFillColor(colore[k]);
     histo[k].Draw("same");
-    histo[k].SetStats(0);
+    //histo[k].SetStats(0);
   }
   /*for(int k = 0; k < colore.size(); k++) {
     histo[k].SetFillColor(0);
