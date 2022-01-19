@@ -62,5 +62,5 @@ double Material::dEdx(Particle& particle, double delta) {
   }
   else perdita = rho_*2/(particle.betagamma()*particle.betagamma());
 
-  return perdita;
+  return perdita/1000; // In GeV
 }
