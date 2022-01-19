@@ -48,9 +48,9 @@ void Material::setI(double I) { I_ = I; }
 // Memeber functions
 double Material::dEdx(Particle& particle, double delta) {
   /* La condizione da verificare è
-     K =  sqrt(p^2 + m^2) - m < X
+     K =  sqrt(p^2 + m^2) - m < X = 50 MeV
      per evitare di usare la radice useremo
-     E^2 = p^2 + m^2 > (X + m)^2 */
+     E^2 = p^2 + m^2 < (X + m)^2 */
   double E, soglia, perdita;  // in MeV/cm
   E = particle.p()*particle.p() + particle.m()*particle.m();
   soglia = (0.05 + particle.m())*(0.05 + particle.m());
