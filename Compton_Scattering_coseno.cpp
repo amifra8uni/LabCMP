@@ -39,7 +39,7 @@ int main() {
   gen->SetSeed(time(NULL));
 
   // Un altro generatore per la distribuzione di numeri casuali
-  TF1* f1 = new TF1("f1", "1+cos(x)*cos(x)", 0, M_PI);
+  TF1* f1 = new TF1("f1", "1+x*x", -1, 1);
 
   double E0 = 662; // KeV
   double res = 0.025;
@@ -59,11 +59,11 @@ int main() {
     // Decido con una probabilità del 65% se il fotone subisce diffusione
     if (prob <= 65) {
       // Estraggo il valore dell'angolo generato da una distribuzione personalizzata
-      double theta = f1->GetRandom();
-      hangle.Fill(cos(theta));
+      double costheta = f1->GetRandom();
+      hangle.Fill(costheta);
 
       // Calcolo il valore dell'energia del fotone dopo la diffusione
-      double Ef = E_Compton(E0, theta);
+      double Ef = E_Compton(E0, costheta);
       // Calcolo il valore misurato tenendo contro dells risoluzione del rivelatore
       Emis = gen -> Gaus(Ef, Ef*res);
       hcompDiff.Fill(Emis);
@@ -85,8 +85,8 @@ int main() {
   // * plot
   hangle.Draw();
   // * store to file in 2 formats
-  canv.SaveAs("./costheta.pdf");
-  canv.SaveAs("./costheta.jpg");
+  canv.SaveAs("./costheta_coseno.pdf");
+  canv.SaveAs("./costheta_coseno.jpg");
 
   // Spostiamoci all'energia dei fotoni diffusi
   hcompDiff.GetXaxis()->SetTitle("E [KeV]");
@@ -94,8 +94,8 @@ int main() {
   // * plot
   hcompDiff.Draw();
   // * store to file in 2 formats
-  canv.SaveAs("./compton-truth-diff.pdf");
-  canv.SaveAs("./compton-truth-diff.jpg");
+  canv.SaveAs("./compton-truth-diff_coseno.pdf");
+  canv.SaveAs("./compton-truth-diff_coseno.jpg");
 
   // Spostiamoci all'energia di tutti i fotoni
   // Anche i non diffusi
@@ -104,8 +104,8 @@ int main() {
   // * plot
   hcompTot.Draw();
   // * store to file in 2 formats
-  canv.SaveAs("./compton-truth.pdf");
-  canv.SaveAs("./compton-truth.jpg");
+  canv.SaveAs("./compton-truth_coseno.pdf");
+  canv.SaveAs("./compton-truth_coseno.jpg");
   
   // Store both histograms to file
   hangle.Write();
@@ -123,7 +123,7 @@ int main() {
   
 }
 
-double E_Compton(double Ei, double theta) {
-  double Ef = Ei / (1 + Ei*(1-cos(theta))/ME);
+double E_Compton(double Ei, double costheta) {
+  double Ef = Ei / (1 + Ei*(1-costheta)/ME);
   return Ef;
 }
