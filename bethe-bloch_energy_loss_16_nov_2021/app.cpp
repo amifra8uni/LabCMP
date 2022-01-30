@@ -8,6 +8,7 @@
 
 //#include "Particle.h"
 #include "Material.h"
+#include "Particle.h"
 
 //Archivio di intestazione di ROOT: grafici, salvataggio
 #include "TGraph.h"

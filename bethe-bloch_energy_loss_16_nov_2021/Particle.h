@@ -1,6 +1,9 @@
 /* Particle.h
    Archivio di intestazione (header) della classe Particle */
 
+#ifndef Particle_h
+#define Particle_h
+
 class Particle {
 
  public:
@@ -35,3 +38,4 @@ class Particle {
   double q_;
   double p_;
 };
+#endif

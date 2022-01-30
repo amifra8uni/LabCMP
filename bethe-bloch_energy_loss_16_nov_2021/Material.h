@@ -1,6 +1,9 @@
 /* Material.h
    Archivio di intestazione (header) della classe Material */
 
+#ifndef Material_h
+#define Materia_h
+
 #include "Particle.h"
 
 class Material {
@@ -38,3 +41,4 @@ class Material {
   double Z_;
   double I_;
 };
+#endif
