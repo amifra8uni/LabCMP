@@ -12,7 +12,9 @@ class SpeedCalculator {
     void setIntegrand( Function* f ) {
         integrand_ = f;
     }
-    double integrand(double x) const {
+  vector<double> integrand(double x, double y) const {
+    vector<double> foo;
+    foo.push_back
         return integrand_->value(x);
     }
 

@@ -1,12 +1,12 @@
-#ifndef DiffSpeed_h
-#define DiffSpeed_h
+#ifndef Speed_h
+#define Speed_h
 
 #include <string>
 #include "Function.h"
 
-class DiffSpeed : public Function {
+class Speed : public Function {
   public:
-    DiffSpeed(const std::string& name, double beta, double m);
+    Speed(const std::string& name, double beta, double m);
 
     virtual double value(double x) const;
     virtual void print() const;

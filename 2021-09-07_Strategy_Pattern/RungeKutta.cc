@@ -1,4 +1,5 @@
 #include "RungeKutta.h"
+#include "Speed.h"
 //#include <stdlib.h>
 #include <iostream>
 
@@ -12,6 +13,7 @@ RungeKutta::RungeKutta(double h) : SpeedCalculator() {
 
 double RungeKutta::velocity(double t0, double y0, double t) const {
   double y = y0;
+  vector <Speed> v;
   for (double i = t0; i < t; i += dt_) {
     
     double K1 = dt_*integrand(y);

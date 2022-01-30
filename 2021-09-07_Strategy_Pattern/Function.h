@@ -6,7 +6,7 @@
 class Function {
   public:
     Function(const std::string& name);
-    virtual double value(double x) const = 0;
+  virtual double value(double x, double y) const = 0;
     virtual void print() const;
     virtual std::string name() const { return name_; }
 
