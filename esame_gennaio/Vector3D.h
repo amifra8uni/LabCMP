@@ -1,5 +1,13 @@
 // Vector3D.h header della classe Vector3D
 
+#ifndef Vector3D_h
+#define Vector3D_h
+
+//Includo gli archivi aggiuntivi necessari
+#include <iostream>
+#include <cmath>
+using namespace std;
+
 class Vector3D {
 
  public:
@@ -53,3 +61,4 @@ class Vector3D {
     z_ = z;
   };
 };
+#endif

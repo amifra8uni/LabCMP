@@ -7,11 +7,16 @@
 #include "Atmosphere.h"
 #include "Planet.h"
 
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
 class Satellite {
   
  public:
   // Costruttori
-  Satellite(Vector3D r, Vector3D v, double m); // Regolare
+  Satellite(const string& name, Vector3D r, Vector3D v, double m); // Regolare
 
 // Metodi di accesso - getters
   Vector3D R() const;
@@ -32,10 +37,9 @@ class Satellite {
 // Metodi accessori - utility functions
   
   void print() const;
-  Vector3D dvdt(Planet plt, Atmosphere atm);
-  Vector3D drdt();
 
  private:
+  string name_;
   Vector3D r_;
   Vector3D v_;
   double m_;  

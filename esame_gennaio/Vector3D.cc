@@ -3,11 +3,6 @@
 
 #include "Vector3D.h"
 
-//Includo gli archivi aggiuntivi necessari
-#include <iostream>
-#include <cmath>
-using namespace std;
-
 //Costruttori o constructors
 Vector3D::Vector3D(){ // Predefinito - Default
   x_=0.;

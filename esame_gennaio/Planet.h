@@ -4,11 +4,16 @@
 #ifndef Planet_h
 #define Planet_h
 
+#include <iostream>
+
+using namespace std;
+
 class Planet {
+
  public:
   // Costrutttori
   Planet(); // Predefinito
-  Planet(double radius, double mass, double grav); // Regolare
+  Planet(const string& name, double radius, double mass, double grav); // Regolare
   Planet(const Planet& planet);// Copia
 
   // Distruttore
@@ -29,7 +34,9 @@ class Planet {
   void print() const;
 
  private:
+
   // Data members
+  string name_;
   double R_;
   double M_;
   double G_;
