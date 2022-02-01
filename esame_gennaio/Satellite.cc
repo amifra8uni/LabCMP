@@ -3,16 +3,28 @@
 #include "Satellite.h"
 
 // Costruttore
+Satellite::Satellite() {
+  name_ = "Nessuno";
+  r_ = Vector3D::Cartesiane(0,0,0);
+  v_ = Vector3D::Cartesiane(0,0,0);
+  m_ = 0.;
+}
 Satellite::Satellite(const string& name, Vector3D r, Vector3D v, double m) { // regolare
   name_ = name;
-  r_ = r; // km
-  v_ = v; // km/s
+  r_ = r; // m
+  v_ = v; // m/s
   m_ = m; // kg
   cout << "Hai creato un satellite " << name_
        << " con Posizione: ";
   r_.print();
   cout << "Velocita' :";
   v_.print();
+}
+Satellite::Satellite(const Satellite& satellite) {
+  name_ = satellite.name_;
+  r_ = satellite.r_; // m
+  v_ = satellite.v_; // m/s
+  m_ = satellite.m_; // kg
 }
 
 // Metodi di accesso - getters

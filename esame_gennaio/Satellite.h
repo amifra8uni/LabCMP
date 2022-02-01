@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
@@ -16,7 +17,9 @@ class Satellite {
   
  public:
   // Costruttori
+  Satellite();
   Satellite(const string& name, Vector3D r, Vector3D v, double m); // Regolare
+  Satellite(const Satellite& satellite); // Copia
 
 // Metodi di accesso - getters
   Vector3D R() const;

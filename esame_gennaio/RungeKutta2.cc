@@ -4,33 +4,53 @@
 
 RungeKutta2::RungeKutta2(Planet p, Satellite s, Atmosphere atm, double dt) : FlySatellite(p, s, atm) {
   dt_=dt;
-  cout << "RungeKutta2("<< p.print()
-       << ", " << s.print()
-       << ", " << atm.print()
-       << ", " << dt << endl;
+  cout << "\nQuesti sono i paramatri passati a RungeKutta2\n";
+  p.print();
+  s.print();
+  atm.print();
+    cout  << "dt = " << dt << " s" << endl;
 }
 
-vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) const {
+vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
 
   vector<Satellite> AllSat;
-  sat.push_back(S());
-
+  AllSat.push_back(S());
+    
   for (double t=tmin; t<tmax; t+=dt_) {
-    satellite foo;
 
-    Vector3D K1v = dvdt(s.V())*dt_;
-    Vector3D newv = s.V().operator+(K1v.operator*(dt_*0.5));
-    Vector3D K2v = dvdt(s.V() + newv);
+    Satellite foo = S();
 
-    Vector3D K2x = drdt();
+    if (foo.R().magnitude() > P().R()) {
+    Vector3D K1v = dvdt(foo.V());
+    
+    // Mi serviva per vedere se i valori di v erano nan
+    // cout << "La dvdt di Vy è " << K1v.getX() << " m/s a t = " << t <<endl; 
+    K1v = K1v.operator*(dt_);
+    Vector3D newv = foo.V().operator+(K1v.operator*(dt_*0.5));
+    Vector3D K2v = dvdt(foo.V() + newv);
+
+    // Per la posizione K1 = K2
+    Vector3D K2x = drdt().operator*(dt_);
 
     // Aggiorno il passo di s nella variabile di appoggio
-    foo.setV(s.V() + K2v);
-    foo.setR(s.R() + K2x);
+    foo.setV(foo.V() + K2v);
+    foo.setR(foo.R() + K2x);
 
     // Copio il valore in satellite
-    s.setS(foo);
-    AllSat.push_back(s);
+    setS(foo);
+    
+    AllSat.push_back(foo);
+    } else {
+      
+      Vector3D Nullv = Vector3D::Cartesiane(0.,0.,0.);
+      foo.setV(Nullv);
+
+      // Copio il valore in satellite
+      setS(foo);
+   
+      AllSat.push_back(foo);
+    }
+    
   }
 
   return AllSat;

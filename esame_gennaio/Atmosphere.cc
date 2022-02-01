@@ -41,20 +41,20 @@ void Atmosphere::setA_p(double A_p) { A_p_ = A_p; }
 
 // Memeber functions
 
-double Atmosphere::T() { // Temperatura
+double Atmosphere::T() const { // Temperatura
   return 900 + 2.5*(F107_-70)+1.5*A_p_;
 }
 
-double Atmosphere::mu(double h) { // molecular mass of the air
+double Atmosphere::mu(double h) const { // molecular mass of the air
   return 27 - 0.012*(h - 200);
 }
 
-double Atmosphere::rho(double h) { // density of the air
+double Atmosphere::rho(double h) const { // density of the air
   return 6*pow(10, -10)*exp(-(h-175)*Atmosphere::mu(h)/Atmosphere::T()); // [Kg/m^3]
 }
 
 // Drag force: dal momento che e' parallelo alla velocita', lo tratto come uno scalare
-Vector3D Atmosphere::D(Vector3D v, double h) {
+Vector3D Atmosphere::D(Vector3D v, double h) const {
   return v.operator*(-0.5*Atmosphere::rho(h)*v.magnitude()*A_*C_d_);
 }
 

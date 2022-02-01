@@ -14,11 +14,23 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include <stdio.h>
 
 using namespace std;
 
+#define LEN 8
+
 int main() {
 
+  // Leggo i dati da un file di input
+  // Definisco un puntatore a file 
+  FILE *fp; // canale
+  // Controllo che l'operazione abbia avuto buon esito
+  if ((fp = fopen("params.ini", "r")) == NULL) {
+    cout << "Errore nell'apertura del file di input" << endl;
+    exit(EXIT_FAILURE);
+  }
+  
   // Definisco i miei oggetti
 
   double MT = 5.972*pow(10,24);// kg

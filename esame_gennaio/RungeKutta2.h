@@ -11,14 +11,16 @@
 
 #include <vector>
 #include <iostream>
+
 using namespace std;
 
-class RungeKutta : public FlySatellite {
+class RungeKutta2 : public FlySatellite {
  public:
   RungeKutta2(Planet p, Satellite s, Atmosphere atm, double dt);
-  ~RungeKutta() { cout << "è stato chiamato il distruttore di RungeKutta2" << endl;}
-
-  virtual vector<Satellite> simulation(double tmin, double tmax) const; 
+  ~RungeKutta2() {
+    cout << "E' stato chiamato il distruttore di RungeKutta2" << endl;
+  };
+  virtual vector<Satellite> simulation(double tmin, double tmax); 
 
 private:
   double dt_;

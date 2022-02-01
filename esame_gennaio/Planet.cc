@@ -7,7 +7,7 @@
 
 // Costrutttori
 Planet::Planet() { // Predefinito
-  name_ = "Planet";
+  name_ = "Pianeta senza nome";
   R_ = 0.;   // radius [km]
   M_ = 0.;   // mass   [kg]
   G_ = 0.;   // costante gravitazionale [N*m^2/kg^2]
@@ -17,7 +17,7 @@ Planet::Planet(const string& name, double radius, double mass, double grav) { //
   R_ = radius;   // radius
   M_ = mass;     // mass
   G_ = grav;
-  cout << "Pianeta (" << name_
+  cout << "\nE' stato creato il seguente pianeta\n(" << name_
        << ", " << R_ << " m"
        << ", " << M_ << " kg"
        << ", " << G_ << " N*m^2/kg^2) "<<endl;
@@ -29,9 +29,10 @@ Planet::Planet(const Planet& planet) { // Copia
 }
 
 // Distruttore
-Planet::~Planet() { }
+Planet::~Planet() {;
+}
 
-// Metodi di accesso - Getter Methods
+// Metodi di accesso - Accassors/Getter Methods
 double Planet::R() const { return R_; }
 double Planet::M() const { return M_; }
 double Planet::G() const { return G_; }

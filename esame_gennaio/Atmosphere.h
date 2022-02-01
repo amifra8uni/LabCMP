@@ -35,11 +35,11 @@ class Atmosphere {
   void setA_p(double A_p);
 
 // Memeber functions
-  double T(); // Temperatura
-  double mu(double h); // molecular mass of the air
-  double rho(double h);// density of the air
+  double T() const; // Temperatura
+  double mu(double h) const; // molecular mass of the air
+  double rho(double h) const;// density of the air
   // Drag force: dal momento che e' parallelo alla velocita', lo tratto come uno scalare
-  Vector3D D(Vector3D v, double h);
+  Vector3D D(Vector3D v, double h) const;
 
 // Metodi accessori - Utility Methods
   void print() const;
