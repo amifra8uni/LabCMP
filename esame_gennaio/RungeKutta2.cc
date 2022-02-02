@@ -16,24 +16,25 @@ vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
   vector<Satellite> AllSat;
   AllSat.push_back(S());
     
-  for (double t=tmin; t<tmax; t+=dt_) {
+  for (double t=tmin; t<=tmax; t+=dt_) {
 
     Satellite foo = S();
 
     if (foo.R().magnitude() > P().R()) {
     Vector3D K1v = dvdt(foo.V());
+    K1v = K1v.operator*(dt_);
     
     // Mi serviva per vedere se i valori di v erano nan
-    // cout << "La dvdt di Vy è " << K1v.getX() << " m/s a t = " << t <<endl; 
-    K1v = K1v.operator*(dt_);
-    Vector3D newv = foo.V().operator+(K1v.operator*(dt_*0.5));
-    Vector3D K2v = dvdt(foo.V() + newv);
+    //cout <<"Vx = "<< foo.V().getX() << "La dVx/dt è " << K1v.getX() << " m/s a t = " << t <<endl; 
+    //cout << "dv/dt * dt = " << K1v.getX() << endl;
 
+    Vector3D newv = foo.V().operator+(K1v.operator*(dt_*0.5));
+    Vector3D K2v = dvdt(newv).operator*(dt_);
+    foo.setV(foo.V() + K2v);
+    setS(foo); // Se non faccio questo la posizione del satellite verrà aggiornata con la velocita' vecchia
+    
     // Per la posizione K1 = K2
     Vector3D K2x = drdt().operator*(dt_);
-
-    // Aggiorno il passo di s nella variabile di appoggio
-    foo.setV(foo.V() + K2v);
     foo.setR(foo.R() + K2x);
 
     // Copio il valore in satellite
@@ -50,7 +51,7 @@ vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
    
       AllSat.push_back(foo);
     }
-    
+    // cout << "t: " << t << endl;
   }
 
   return AllSat;

@@ -20,7 +20,7 @@ public:
   FlySatellite(Planet p, Satellite s, Atmosphere atm);
 
   //Distruttore
-  ~FlySatellite();
+  virtual ~FlySatellite();
   
   // Setters - Metodi di aggiornamento
   void setP(Planet p);

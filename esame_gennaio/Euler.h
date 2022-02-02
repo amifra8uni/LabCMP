@@ -1,7 +1,7 @@
-// RungeKutta2.h
+// Euler.h
 
-#ifndef RungeKutta2_h
-#define RungeKutta2_h
+#ifndef Euler_h
+#define Euler_h
 
 #include "Planet.h"
 #include "Satellite.h"
@@ -14,11 +14,11 @@
 
 using namespace std;
 
-class RungeKutta2 : public FlySatellite {
+class Euler : public FlySatellite {
  public:
-  RungeKutta2(Planet p, Satellite s, Atmosphere atm, double dt);
-  virtual ~RungeKutta2() {
-    cout << "E' stato chiamato il distruttore di RungeKutta2" << endl;
+  Euler(Planet p, Satellite s, Atmosphere atm, double dt);
+  virtual ~Euler() {
+    cout << "E' stato chiamato il distruttore della classe Euler" << endl;
   };
   virtual vector<Satellite> simulation(double tmin, double tmax); 
 
