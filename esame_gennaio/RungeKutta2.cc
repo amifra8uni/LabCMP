@@ -42,9 +42,6 @@ vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
     
     AllSat.push_back(foo);
     } else {
-      
-      Vector3D Nullv = Vector3D::Cartesiane(0.,0.,0.);
-      foo.setV(Nullv);
 
       // Copio il valore in satellite
       setS(foo);

@@ -55,7 +55,7 @@ double Atmosphere::rho(double h) const { // density of the air
 
 // Drag force: dal momento che e' parallelo alla velocita', lo tratto come uno scalare
 Vector3D Atmosphere::D(Vector3D v, double h) const {
-  return v.operator*(-0.5*Atmosphere::rho(h)*v.magnitude()*A_*C_d_);
+  return v.operator*(-0.5*Atmosphere::rho(h*0.001)*v.magnitude()*A_*C_d_);
 }
 
 // Metodi accessori - Utility Methods

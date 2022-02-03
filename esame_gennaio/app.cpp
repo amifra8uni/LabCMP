@@ -13,12 +13,14 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <iomanip>
 #include <cmath>
 
 using namespace std;
 
+#define LEN 30
 
 int main() {
 
@@ -39,12 +41,12 @@ int main() {
   }
 
   // Variables to read in from file
-  int metodo_integrazione;
+  char metodo_integrazione[LEN];
   double dt;        // s
   int Nsteps = 0.;
   double r0;        // m
   double m_Sat;     // kg
-  double A = 0;     // cross sectional area of the object
+  double A = 0;     // m^2 cross sectional area of the object 
   double F107 = 80; // Solar radio flux
   double C_d = 2;   // Drag coefficient
   double A_p = 50;  // Geomagnetic index
@@ -58,7 +60,7 @@ int main() {
     // parse line with the provided format and put data in variables
     // NB: USING POINTERS TO VARIABLES
     // format:  %s string    %f  float   %lf  double
-    sscanf(line.c_str(),"%d %lf %d %lf %lf %lf %lf %lf %lf", &metodo_integrazione, &dt, &Nsteps, &r0, &m_Sat, &A, &F107, &C_d, &A_p);
+    sscanf(line.c_str(),"%s %lf %d %lf %lf %lf %lf %lf %lf", metodo_integrazione, &dt, &Nsteps, &r0, &m_Sat, &A, &F107, &C_d, &A_p);
 
     // print out for debug purposes
     cout << "I parametri presi in input sono (presi tutti su una linea)\n"
@@ -70,7 +72,7 @@ int main() {
 	 << "\tCross sec. area: " << A
 	 << "\tSolar radio flux: " << F107
 	 << "\tDrag coefficient: " << C_d
-	 <<" \nGeomatrical indez: " << A_p << endl;
+	 <<" \nGeomatrical index: " << A_p << endl;
   } // !eof
   
   // Definisco i miei oggetti
@@ -90,18 +92,19 @@ int main() {
   aria.print();
 
   Vector3D r = Vector3D::Cartesiane(r0 + RT, 0 ,0);
-  //   Vector3D v = Vector3D::Cartesiane(0, sqrt(Earth.G()*Earth.M()/(r0+Earth.R())), 0);
-  Vector3D v = Vector3D::Cartesiane(0, 0, 0); // Prova oggetto in caduta libera
+  Vector3D v = Vector3D::Cartesiane(0, sqrt(Earth.G()*Earth.M()/(r0+Earth.R())), 0);
+  // Vector3D v = Vector3D::Cartesiane(0, 0, 0); // Prova oggetto in caduta libera
   Satellite sat("Satellite1", r, v, m_Sat);
   sat.print();
 
   // Scelgo il metodo di integrazione
   // RK2 (Planet, Satellite, Atmosphere, double dt)
   FlySatellite* met = 0;
-  if(metodo_integrazione == 0) met = new RungeKutta2(Earth, sat, aria, dt);
-  else if (metodo_integrazione == 1) met = new Euler(Earth, sat, aria, dt);
+  cout << strcmp(metodo_integrazione, "RungeKutta2");
+  if (!strcmp(metodo_integrazione, "RungeKutta2")) met = new RungeKutta2(Earth, sat, aria, dt); 
+  else if (!strcmp(metodo_integrazione, "Euler"))  met = new Euler(Earth, sat, aria, dt);
   else {
-    cerr << "\n***Il metodo di integrazione selezionato" << metodo_integrazione << " non è corretto\nScegliere tra: 0 (RungeKutta2) e 1 (Eulero)***\n" << endl;
+    cerr << "\n*** Il metodo di integrazione selezionato" << metodo_integrazione << " non è corretto ***\nScegliere tra: RungeKutta2 e Euler\n" << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -113,12 +116,12 @@ int main() {
   // ** OUTPUT**
    // storing to file RK result
   ofstream ofile;
-  string ofname("./sim1_Eu_100.dat");
+  string ofname("./sim2_dt_10_N_200k.dat");
   cout << "Salvando i dati su " << ofname << endl;
   ofile.open( ofname );
 
   // print to file 
-  ofile << "#x"  << "\t" << "#y" << "\t" << "#z" << "\t" << "#vx" << "\t" << "#vy" << "\t" << "#vz" << endl;
+  ofile << "#x"  << "\t" << "#y" << "\t" << "#z" << "\t" << "#vx" << "\t" << "#vy" << "\t" << "#vz" << "\t" << "#r" << "\t" << "#v" << endl;
   for(vector<Satellite>::const_iterator it = simulazione.begin(); it != simulazione.end(); ++it) {
     ofile << setprecision(5) << fixed;
     ofile << it->R().getX() << "\t"
@@ -126,7 +129,9 @@ int main() {
 	  << it->R().getZ() << "\t"
 	  << it->V().getX() << "\t"
 	  << it->V().getY() << "\t"
-	  << it->V().getZ() << "\t" << endl;
+	  << it->V().getZ() << "\t"
+	  << it->R().magnitude() << "\t"
+	  << it->V().magnitude() << "\t" << endl;
   }
 
   infile.close(); // close input file before exiting
