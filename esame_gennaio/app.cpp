@@ -24,7 +24,9 @@
 using namespace std;
 
 #define LEN 30
-
+#define MT 5.972e24 // kg
+#define RT 6371e3   // m
+#define CGU 6.67e-11  // N m^2/kg^2
 
 int main() {
 
@@ -59,7 +61,7 @@ int main() {
   while(!infile.eof()) {
     // get current line
     getline(infile, line);
-    if( line == "\n" || line == "" ) continue;
+    if( line == "\n" || line == "" || line == "# metodo_integrazione, dt, Nsteps, r0, m_Sat, A, F107, C_d, A_p") continue;
 
     // parse line with the provided format and put data in variables
     // NB: USING POINTERS TO VARIABLES
@@ -80,10 +82,7 @@ int main() {
   } // !eof
   
   // Definisco i miei oggetti
-  double MT = 5.972e24;// kg
-  double RT = 6371e3;     // m
-  double G = 6.67e-11; // N m^2/kg^2
-  Planet Earth("Earth", RT, MT, G);   // Planet(name, radius, mass, grav const)
+  Planet Earth("Earth", RT, MT, CGU);   // Planet(name, radius, mass, grav const)
 
   // Controllo che l'altezza del satellite inserita non sia negativa
   if(r0 < 0) {
