@@ -11,10 +11,7 @@ RungeKutta2::RungeKutta2(Planet p, Satellite s, Atmosphere atm, double dt) : Fly
     cout  << "dt = " << dt << " s" << endl;
 }
 
-vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
-
-  vector<Satellite> AllSat;
-  AllSat.push_back(S());
+void RungeKutta2::simulation(double tmin, double tmax, ostream& ofile) {
     
   for (double t=tmin; t<=tmax; t+=dt_) {
 
@@ -40,17 +37,19 @@ vector<Satellite> RungeKutta2::simulation(double tmin, double tmax) {
     // Copio il valore in satellite
     setS(foo);
     
-    AllSat.push_back(foo);
-    } else {
-
-      // Copio il valore in satellite
-      setS(foo);
-   
-      AllSat.push_back(foo);
-    }
+    } else  setS(foo); // Copio il valore in satellite
+    
+    // print to file 
+    ofile << setprecision(5) << fixed;
+    ofile << foo.R().getX() << "\t"
+	  << foo.R().getY() << "\t"
+	  << foo.R().getZ() << "\t"
+	  << foo.V().getX() << "\t"
+	  << foo.V().getY() << "\t"
+	  << foo.V().getZ() << "\t"
+	  << foo.R().magnitude() << "\t"
+	  << foo.V().magnitude() << "\t" << endl;  
     // cout << "t: " << t << endl;
   }
-
-  return AllSat;
 }
 

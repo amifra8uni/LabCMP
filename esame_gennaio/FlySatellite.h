@@ -32,7 +32,7 @@ public:
   Satellite S() const;
   Atmosphere Atm() const;
 
-  virtual vector <Satellite> simulation(double tmin, double tmax) = 0;
+  virtual void simulation(double tmin, double tmax, ostream& ofile) = 0;
 
   Vector3D dvdt(Vector3D v) const;
   Vector3D drdt() const;

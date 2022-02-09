@@ -15,7 +15,6 @@
 #include <iostream>
 #include <string>
 #include <cstring>
-#include <vector>
 #include <iomanip>
 #include <cmath>
 #include <stdio.h>
@@ -24,9 +23,9 @@
 using namespace std;
 
 #define LEN 30
-#define MT 5.972e24 // kg
-#define RT 6371e3   // m
-#define CGU 6.67e-11  // N m^2/kg^2
+#define MT 5.972e24  // kg
+#define RT 6371e3    // m
+#define CGU 6.67e-11 // N m^2/kg^2
 
 int main() {
 
@@ -110,31 +109,29 @@ int main() {
     exit(EXIT_FAILURE);
   }
 
-  // Definisco il passo di integrazione e gli estremi
-  double tmin = 0;
-  double tmax = Nsteps*dt;
-  vector <Satellite> simulazione = met->simulation(tmin, tmax);
-
   // ** OUTPUT**
-   // storing to file RK result
+  // storing to file integration result
   ofstream ofile;
   //string ofnam("./sim2_dt_1_N_20k.dat");
   cout << "Salvando i dati sul file di output " << endl;
-  ofile.open("./simRK_dt_1_N_20k_h600km.dat");
+  ofile.open("./simRK_dt_1_N_20k_h600km_nuova_stampa.dat");
 
-  // print to file 
+  // Definisco il passo di integrazione e gli estremi
+  double tmin = 0;
+  double tmax = Nsteps*dt;
+
+  // Stampo la prima riga del file di output e integro
   ofile << "#x"  << "\t" << "#y" << "\t" << "#z" << "\t" << "#vx" << "\t" << "#vy" << "\t" << "#vz" << "\t" << "#r" << "\t" << "#v" << endl;
-  for(vector<Satellite>::const_iterator it = simulazione.begin(); it != simulazione.end(); ++it) {
-    ofile << setprecision(5) << fixed;
-    ofile << it->R().getX() << "\t"
-	  << it->R().getY() << "\t"
-	  << it->R().getZ() << "\t"
-	  << it->V().getX() << "\t"
-	  << it->V().getY() << "\t"
-	  << it->V().getZ() << "\t"
-	  << it->R().magnitude() << "\t"
-	  << it->V().magnitude() << "\t" << endl;
-  }
+  ofile << setprecision(5) << fixed;
+  ofile << sat.R().getX() << "\t"
+	<< sat.R().getY() << "\t"
+	<< sat.R().getZ() << "\t"
+	<< sat.V().getX() << "\t"
+	<< sat.V().getY() << "\t"
+	<< sat.V().getZ() << "\t"
+	<< sat.R().magnitude() << "\t"
+	<< sat.V().magnitude() << "\t" << endl;  
+  met->simulation(tmin, tmax, ofile);
 
   infile.close(); // close input file before exiting
   ofile.close();  // close output file before exiting

@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ class RungeKutta2 : public FlySatellite {
   virtual ~RungeKutta2() {
     cout << "E' stato chiamato il distruttore di RungeKutta2" << endl;
   };
-  virtual vector<Satellite> simulation(double tmin, double tmax); 
+  void simulation(double tmin, double tmax, ostream& ofile); 
 
 private:
   double dt_;

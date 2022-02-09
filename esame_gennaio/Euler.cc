@@ -11,10 +11,7 @@ Euler::Euler(Planet p, Satellite s, Atmosphere atm, double dt) : FlySatellite(p,
     cout  << "dt = " << dt << " s" << endl;
 }
 
-vector<Satellite> Euler::simulation(double tmin, double tmax) {
-
-  vector<Satellite> AllSat;
-  AllSat.push_back(S());
+void Euler::simulation(double tmin, double tmax, ostream& ofile) {
     
   for (double t=tmin; t<=tmax; t+=dt_) {
 
@@ -22,7 +19,7 @@ vector<Satellite> Euler::simulation(double tmin, double tmax) {
 
     if (foo.R().magnitude() > P().R()) {
 
-      // Velocita'
+      // ** Velocita' **
       Vector3D fvel = dvdt(foo.V()).operator*(dt_);
       foo.setV(foo.V()+fvel);
       // Copio il valore in satellite
@@ -31,22 +28,29 @@ vector<Satellite> Euler::simulation(double tmin, double tmax) {
       // Mi serviva per vedere se i valori di v erano nan
       //cout <<"Vx = "<< foo.V().getX() << "La dVx/dt è " << fvel.getX() << " m/s a t = " << t <<endl; 
 
-      // Posizione
+      // ** Posizione **
       Vector3D fpos = drdt().operator*(dt_);
       foo.setR(foo.R()+fpos);
+      
       // Copio il valore in satellite
       setS(foo);
-      AllSat.push_back(foo);
       
     } else {
 
       // Copio il valore in satellite
       setS(foo);
    
-      AllSat.push_back(foo);
     }
+      // print to file 
+      ofile << setprecision(5) << fixed;
+      ofile << foo.R().getX() << "\t"
+	    << foo.R().getY() << "\t"
+	    << foo.R().getZ() << "\t"
+	    << foo.V().getX() << "\t"
+	    << foo.V().getY() << "\t"
+	    << foo.V().getZ() << "\t"
+	    << foo.R().magnitude() << "\t"
+	    << foo.V().magnitude() << "\t" << endl;  
     // cout << "t: " << t << endl;
   }
-
-  return AllSat;
 }
