@@ -1,5 +1,6 @@
 /* app.cpp
-   File in C++ per l'esame di gennaio 2022 di CMP*/
+   File in C++ per l'esame di gennaio 2022 di CMP
+   Francesco Amicucci 1795152                    */
 
 // Includo gli archivi di intestazione
 #include "RungeKutta2.h"
@@ -17,10 +18,13 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 
 #define LEN 30
+
 
 int main() {
 
@@ -100,11 +104,10 @@ int main() {
   // Scelgo il metodo di integrazione
   // RK2 (Planet, Satellite, Atmosphere, double dt)
   FlySatellite* met = 0;
-  cout << strcmp(metodo_integrazione, "RungeKutta2");
   if (!strcmp(metodo_integrazione, "RungeKutta2")) met = new RungeKutta2(Earth, sat, aria, dt); 
   else if (!strcmp(metodo_integrazione, "Euler"))  met = new Euler(Earth, sat, aria, dt);
   else {
-    cerr << "\n*** Il metodo di integrazione selezionato" << metodo_integrazione << " non è corretto ***\nScegliere tra: RungeKutta2 e Euler\n" << endl;
+    cerr << "\n*** Il metodo di integrazione selezionato" << metodo_integrazione << " non e' corretto ***\nScegliere tra: RungeKutta2 e Euler\n" << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -116,9 +119,9 @@ int main() {
   // ** OUTPUT**
    // storing to file RK result
   ofstream ofile;
-  string ofname("./sim2_dt_10_N_200k.dat");
-  cout << "Salvando i dati su " << ofname << endl;
-  ofile.open( ofname );
+  //string ofnam("./sim2_dt_1_N_20k.dat");
+  cout << "Salvando i dati sul file di output " << endl;
+  ofile.open("./simRK_dt_1_N_20k_h600km.dat");
 
   // print to file 
   ofile << "#x"  << "\t" << "#y" << "\t" << "#z" << "\t" << "#vx" << "\t" << "#vy" << "\t" << "#vz" << "\t" << "#r" << "\t" << "#v" << endl;
@@ -136,7 +139,7 @@ int main() {
 
   infile.close(); // close input file before exiting
   ofile.close();  // close output file before exiting
-  cout << ofname << " output file successfully created\n " << endl;
+  cout << "Output file successfully created\n " << endl;
 
   delete met;
   return 0;
