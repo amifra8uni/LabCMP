@@ -80,9 +80,9 @@ int main() {
   } // !eof
   
   // Definisco i miei oggetti
-  double MT = 5.972*pow(10,24);// kg
-  double RT = 6371.*1000.;     // m
-  double G = 6.67*pow(10,-11); // N m^2/kg^2
+  double MT = 5.972e24;// kg
+  double RT = 6371e3;     // m
+  double G = 6.67e-11; // N m^2/kg^2
   Planet Earth("Earth", RT, MT, G);   // Planet(name, radius, mass, grav const)
 
   // Controllo che l'altezza del satellite inserita non sia negativa
