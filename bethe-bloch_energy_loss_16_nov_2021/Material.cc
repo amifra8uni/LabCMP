@@ -52,15 +52,15 @@ double Material::dEdx(Particle& particle, double delta) {
      per evitare di usare la radice useremo
      E^2 = p^2 + m^2 < (X + m)^2 */
   double E2, soglia, perdita;  // in MeV/cm
-  E2 = particle.p()*particle.p() + particle.m()*particle.m();
   soglia = (0.05 + particle.m())*(0.05 + particle.m());
-
+  E2 = particle.E()*particle.E();
   if ( E2 > soglia) {
     double K = 0.307075;     // MeV cm^2/mol
     double me = 510999;      // eV
-    perdita =  rho_*K*particle.q()*particle.q()*Z_*( log(2*me*particle.betagamma()*particle.betagamma()/I_)-particle.beta()*particle.beta() - delta/2);
+    perdita =  rho_*K*particle.q()*particle.q()*Z_*( log(2*me*particle.betagamma()*particle.betagamma()/I_)-particle.beta()*particle.beta() - 0.5*delta)/(A_*particle.beta()*particle.beta());
   }
-  else perdita = rho_*2./(particle.betagamma()*particle.betagamma());
+  //else perdita = particle.p()*particle.p();
+  else perdita = rho_*2./(particle.beta()*particle.beta());
 
   return perdita/1000; // In GeV
 }

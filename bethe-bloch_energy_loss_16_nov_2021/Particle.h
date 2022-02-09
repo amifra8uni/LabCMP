@@ -30,6 +30,7 @@ class Particle {
   double beta();
   double gamma();
   double betagamma();
+  double E();
 
  private:
 

@@ -42,17 +42,17 @@ void Particle::setP(double p) { p_ = p; }
 
 // Memeber functions
 double Particle::beta() {
-  double E;
-  E = sqrt(m_*m_ + p_*p_);
-  return p_/E;
+  return p_/E();
 }
 
 double Particle::gamma() {
-  double E;
-  E = sqrt(m_*m_ + p_*p_);
-  return E/m_;
+  return E()/m_;
 }
 
 double Particle::betagamma() {
   return Particle::beta()*Particle::gamma();
+}
+
+double Particle::E() {
+  return sqrt(m_*m_ + p_*p_);
 }

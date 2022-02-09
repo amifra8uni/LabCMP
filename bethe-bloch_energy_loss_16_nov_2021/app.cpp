@@ -26,9 +26,9 @@ using namespace std;
 
 int main() {
 
-  Particle alpha(3.7, 2., 1.);
-  cout << "triimpulso alpha: " << alpha.p() << endl;
-  Particle proton(0.938, 1., 1.);
+  Particle alpha(3.7, 2., 10.);
+  cout << "triimpulso alpha: " << alpha.p() << " GeV" << endl;
+  Particle proton(0.938, 1., 10.);
   cout << "triimpulso protone: " << proton.p() << endl;
   Material silicon(RHO, A, Z, I);
   
@@ -44,16 +44,18 @@ int main() {
   }
   std::cout << "storing output in root file " << rootfname << std::endl;
 
-  vector <double> xalpha,  xalphadE, xp, xpdE, x, dE_dx_p, dE_dx_Alpha, dE_p, dE_Alpha;
+  vector <double> xalpha,  xalphadE, xp, xpdE, x, dE_dx_p, dE_dx_Alpha, dE_p, dE_Alpha, betagamma;
 
   //definisco il passo della mia funzione
-  double dx = 0.001; // cm
+  double dx = 0.01; // cm
   int i = 0;
   double T_Proto, T_Alpha, E_Proto, E_Alpha;
-  E_Proto = sqrt(proton.p()*proton.p() + (proton.m()*proton.m()));
-  E_Alpha = sqrt(alpha.p()*alpha.p()   + (alpha.m()*alpha.m()));
-  T_Proto = E_Proto - proton.m();
-  T_Alpha = E_Alpha - alpha.m();
+  double loss_tot_Proto = 0;
+  double loss_tot_Alpha = 0;
+  E_Proto = proton.E();
+  E_Alpha = alpha.E();
+  T_Proto = proton.E() - proton.m();
+  T_Alpha = alpha.E()- alpha.m();
 
   // PROTONE
   dE_p.push_back(0);
@@ -70,6 +72,9 @@ int main() {
     xp.push_back( i*dx );
     xpdE.push_back( (i+1)*dx);
 
+    // Mi salvo quanta energia ha perso in totale la particelle
+    loss_tot_Proto += dE_dx_p[i]*dx;
+
     // Ricalcolo le energie della particella
     T_Proto -= dE_dx_p[i]*dx; // GeV
     E_Proto -= dE_dx_p[i]*dx;
@@ -79,19 +84,22 @@ int main() {
     if( T_Proto >= 0) proton.setP(sqrt( E_Proto*E_Proto - proton.m()*proton.m() ));
     else proton.setP(0);
 
+    // Mi salvo il betagamma per vedere se ritorna la curva di BB
+    // betagamma.push_back(proton.betagamma());
+
     i++;
   }
 
   int Np = xp.size();
   int Np_dE = xpdE.size();
   xp.push_back(xp[Np-1]);
-  dE_dx_p.push_back(0);
+  // dE_dx_p.push_back(0);
   xpdE.push_back(xpdE[Np_dE-1]);
-  dE_p.push_back(0);
+  // dE_p.push_back(0);
   int j=0;
 
   // ALPHA
-  while (T_Alpha >= 0) {
+  while (T_Alpha > 0) {
 
     // Calcolo la perdita di energia per le due particelle
     // Salvo i dati per il grafico
@@ -103,6 +111,8 @@ int main() {
     xalpha.push_back( j*dx );
     xalphadE.push_back( (j+1)*dx);
 
+    // Energia persa in totale
+    loss_tot_Alpha += dE_dx_Alpha[j]*dx;
     // Ricalcolo le energie della particella
     T_Alpha -= dE_dx_Alpha[j]*dx; // GeV
     E_Alpha -= dE_dx_Alpha[j]*dx;
@@ -114,6 +124,10 @@ int main() {
 
     j++;
   }
+
+  cout << "In totale l'energia persa dalle tue particelle e' stata:\n"
+       << "Protone: " << loss_tot_Proto << " GeV\n"
+       << "Alpha: " << loss_tot_Alpha << " GeV" << endl;
 
   int N_Alpha = xalpha.size();
   int N_Alpha_dE = xalphadE.size();
@@ -129,11 +143,11 @@ int main() {
   canv.SetLogx();
 
   TGraph* gr1 = new TGraph(xp.size(), &xp[0], &dE_dx_p[0]);
-  gr1->SetTitle("Energia persa per un protone di 1 GeV nel silicio; Profondità x [cm];Energia persa [Gev/cm]");
+  gr1->SetTitle("Energia persa per particelle di 10 GeV nel silicio; Profondità x [cm];Energia persa [Gev/cm]");
   gr1->SetLineColor(2);
   gr1->SetLineWidth(2);
   gr1->SetMinimum(0);
-  gr1->SetMaximum(5);
+  gr1->SetMaximum(0.3);
   gr1->Draw();
 
   TGraph* gr2 = new TGraph(xalpha.size(), &xalpha[0], &dE_dx_Alpha[0]);
@@ -142,7 +156,7 @@ int main() {
   gr2->Draw("same");
 
   TLegend* leg = new TLegend(0.1,0.8,0.3,0.9);
-  leg->SetHeader("dx = 0,001 cm");
+  leg->SetHeader("dx = 0,01 cm");
   leg->AddEntry(gr1,"Protone","l");
   leg->AddEntry(gr2,"Alpha","l");
   leg->Draw();
@@ -159,11 +173,11 @@ int main() {
   canv2.SetLogx();
 
   TGraph* gr12 = new TGraph(xpdE.size(), &xpdE[0], &dE_p[0]);
-  gr12->SetTitle("Energia persa per una particella nel silicio; Profondità x [cm];Energia persa [Gev]");
+  gr12->SetTitle("Energia persa per una particella di 10 GeV nel silicio; Profondità x [cm];Energia persa [Gev]");
   gr12->SetLineColor(2);
   gr12->SetLineWidth(2);
   gr12->SetMinimum(0);
-  gr12->SetMaximum(0.01);
+  gr12->SetMaximum(0.03);
   gr12->Draw();
 
   TGraph* gr22 = new TGraph(xalphadE.size(), &xalphadE[0], &dE_Alpha[0]);
@@ -182,6 +196,31 @@ int main() {
   delete gr12;
   delete gr22;
   delete leg2;
+
+  /* Plot betagamma
+  TCanvas canv3("canv_beta_gamma", "canvas for plotting", 1920, 1080);
+  canv2.SetGrid();
+  TGraph* gr31 = new TGraph(betagamma.size(), &betagamma[0], &dE_dx_p[0]);
+  gr31->SetTitle("Energia persa in funzione del betagamma per una particella nel silicio");
+  gr31->SetLineColor(2);
+  gr31->SetLineWidth(2);
+  //gr31->SetMinimum(0);
+  //gr31->SetMaximum(0.03);
+  gr31->Draw();
+
+  TGraph* gr32 = new TGraph(betagamma.size(), &betagamma[0], &dE_dx_Alpha[0]);
+  gr32->SetLineColor(4);
+  gr32->SetLineWidth(2);
+  gr32->Draw("same");
+
+  TLegend* leg3 = new TLegend(0.1,0.8,0.3,0.9);
+  leg3->SetHeader("dx = 0,001 cm");
+  leg3->AddEntry(gr31,"Protone","l");
+  leg3->AddEntry(gr32,"Alpha 1 GeV","l");
+  leg3->Draw();
+	
+  canv3.SaveAs("betagamma_proton_Alpha_in_Si.pdf");*/
+
 
   // Exit
   return 0;
