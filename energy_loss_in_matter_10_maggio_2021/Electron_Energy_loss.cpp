@@ -32,7 +32,7 @@ int main() {
   double delta = 0.6;
   double X_0 = 0.56;
   double E_C = 7.4;
-  double N_particles = 1e1;
+  double N_particles = 1e4;
 
   // Definisco il passo della mia funzione
   double dx = 0.01; // cm 
