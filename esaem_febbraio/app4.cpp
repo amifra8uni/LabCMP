@@ -38,10 +38,10 @@ int main() {
   Ceq.setName("Ceq");
   
   // ** OUTPUT**
-  ofstream ofile;
+  ofstream ofile("./true.dat");
   string ofnam("./true.dat");
-  cout << "Crando una cartella di output chiamata" << ofnam << endl;
-  ofile.open(ofnam);
+  cout << "Crando una cartella di output chiamata " << ofnam << endl;
+  //ofile.open(ofnam); // Non funziona nella macchina virtuale
 
   // Stampo la prima riga del file di output
   ofile << "#C1" << "\t" << "#Ceq"  << endl;
